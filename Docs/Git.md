@@ -1,0 +1,22 @@
+# Git
+
+Set your name and email accordingly.
+
+    git config user.name "My Name"
+    git config user.email "My Email"
+
+Also disable tracking of executable permissions.
+This is helpful when running Git from within [WSL](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux).
+
+    git config core.filemode false
+
+You can ignore personal files using `.git/info/exclude`.
+
+## Commit Messages
+
+Read through [*How to Write a Git Commit Message*](https://chris.beams.io/posts/git-commit/) and adhere to it where it makes sense.
+
+Put issue references in the body of the commit message.
+GitLab may not pick them up correctly from the subject line.
+
+Consider prefixing the subject if the commit only touches a specific part of the codebase (e.g. `Docs:` or `Scripts:`).

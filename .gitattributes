@@ -1,0 +1,11 @@
+*.cs     text eol=lf diff=csharp
+*.md     text eol=lf
+*.shader text eol=lf
+
+*.asset  merge=unityyamlmerge
+*.mat    merge=unityyamlmerge
+*.meta   merge=unityyamlmerge
+*.prefab merge=unityyamlmerge
+*.unity  merge=unityyamlmerge
+
+NavMesh-*.asset binary
