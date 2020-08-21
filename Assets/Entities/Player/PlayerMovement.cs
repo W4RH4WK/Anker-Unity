@@ -12,8 +12,10 @@ public class PlayerMovement : MonoBehaviour
     }
 
     State CurrentState = State.Grounded;
-
     bool IsGrounded => CurrentState == State.Grounded;
+
+    // Feet position used to determine grounded state.
+    public GameObject Feet;
 
     void UpdateCurrentState()
     {
@@ -67,19 +69,22 @@ public class PlayerMovement : MonoBehaviour
         JumpInputDown = value.isPressed;
     }
 
-    void ResetJumpInputUpDown()
+    void ResetJumpInputDown()
     {
         JumpInputDown = false;
     }
 
     void Jump()
     {
-        if (JumpsLeft > 0)
-        {
-            JumpsLeft--;
-            VerticalVelocity = JumpStrength;
-            JumpBoostTimeLeft = JumpBoostTime;
-        }
+        if (JumpsLeft <= 0)
+            return;
+
+        JumpsLeft--;
+
+        CurrentState = State.Jumping;
+
+        VerticalVelocity = JumpStrength;
+        JumpBoostTimeLeft = JumpBoostTime;
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -97,8 +102,6 @@ public class PlayerMovement : MonoBehaviour
 
     //////////////////////////////////////////////////////////////////////////
 
-    public GameObject Feet;
-
     Rigidbody2D RigidBody;
 
     void Awake()
@@ -113,24 +116,20 @@ public class PlayerMovement : MonoBehaviour
         UpdateCoyoteTime();
         UpdateMoveVelocity();
 
+        if (JumpInputDown)
+            Jump();
+
         if (CurrentState == State.Grounded)
         {
-            if (JumpInputDown)
-            {
-                Jump();
-            }
-            else
-            {
-                JumpsLeft = Jumps;
+            // Always reset jumps when grounded.
+            JumpsLeft = Jumps;
 
-                // add slight downward velocity to prevent peter-panning
-                VerticalVelocity = -0.1f;
-            }
+            // Add slight downward velocity to prevent peter-panning.
+            VerticalVelocity = -0.1f;
         }
         else if (CurrentState == State.Jumping)
         {
-            if (JumpInputDown)
-                Jump();
+            // Holding jump for longer makes you go higher.
 
             if (JumpInput)
                 JumpBoostTimeLeft -= Time.fixedDeltaTime;
@@ -142,18 +141,15 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (CurrentState == State.Falling)
         {
-            // We lose one jump when falling (and coyote-time has passed).
+            // We loose one jump when falling (and coyote-time has passed).
             if (CoyoteTimeLeft < 0.0f && JumpsLeft == Jumps)
                 JumpsLeft--;
 
-            if (JumpInputDown)
-                Jump();
-            else
-                VerticalVelocity -= Gravity * Time.fixedDeltaTime;
+            VerticalVelocity -= Gravity * Time.fixedDeltaTime;
         }
 
         RigidBody.MovePosition(RigidBody.position + new Vector2(MoveVelocity, VerticalVelocity) * Time.fixedDeltaTime);
 
-        ResetJumpInputUpDown();
+        ResetJumpInputDown();
     }
 }
