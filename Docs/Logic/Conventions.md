@@ -48,6 +48,16 @@ public class CooldownTimer
 }
 ```
 
+## Public Fields in MonoBehaviours
+
+Do not initialize public fields of MonoBehaviours in code as these values are overwritten by the Prefab or Scene.
+Simply set them in the corresponding Prefab with the Unity Editor.
+The values are stored in the Prefab's `.meta` file.
+
+Note that you can also provide [custom presets](https://docs.unity3d.com/Manual/Presets.html).
+While such a preset can be used to provide sane default values for components, updating a preset does not propagate the update to any components.
+Use Prefabs for this purpose.
+
 ## Properties with Backing Fields
 
 Prefix the name of the field with an underscore (`_`).
