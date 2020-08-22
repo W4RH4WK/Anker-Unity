@@ -20,3 +20,9 @@ Put issue references in the body of the commit message.
 GitLab may not pick them up correctly from the subject line.
 
 Consider prefixing the subject if the commit only touches a specific part of the codebase (e.g. `Docs:` or `Scripts:`).
+
+## Branches
+
+Keep your work in descriptively named branches, prefixed with your GitLab username, followed by a slash (e.g. `rocky44r/combo-mechanic`).
+
+Alternatively, if there is already an issue present in the tracker, use the issue number and title (e.g. `137-mini-map`).
