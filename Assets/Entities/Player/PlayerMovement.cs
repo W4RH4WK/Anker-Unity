@@ -148,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
             VerticalVelocity -= Gravity * Time.fixedDeltaTime;
         }
 
-        RigidBody.MovePosition(RigidBody.position + new Vector2(MoveVelocity, VerticalVelocity) * Time.fixedDeltaTime);
+        RigidBody.velocity = new Vector2(MoveVelocity, VerticalVelocity);
 
         ResetJumpInputDown();
     }
