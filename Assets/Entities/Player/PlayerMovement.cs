@@ -40,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
 
     //////////////////////////////////////////////////////////////////////////
 
+    [Space]
+
     public float MoveSpeed;
     public float MoveResponsiveness;
     public float MoveResponsivenessInAir;
@@ -60,11 +62,15 @@ public class PlayerMovement : MonoBehaviour
 
     //////////////////////////////////////////////////////////////////////////
 
+    [Space]
+
     public float Gravity;
     public float MaxFallSpeed;
     float VerticalVelocity;
 
     //////////////////////////////////////////////////////////////////////////
+
+    [Space]
 
     public int Jumps;
     int JumpsLeft;
@@ -100,6 +106,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
     //////////////////////////////////////////////////////////////////////////
+
+    [Space]
 
     public float CoyoteTime;
     float CoyoteTimeLeft;
