@@ -1,6 +1,6 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Assertions;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -14,17 +14,28 @@ public class PlayerMovement : MonoBehaviour
     State CurrentState = State.Grounded;
     bool IsGrounded => CurrentState == State.Grounded;
 
-    // Feet position used to determine grounded state.
-    public GameObject Feet;
+    public Collider2D Head;
+    public Collider2D Feet;
+    ContactFilter2D TerrainContactFilter;
 
     void UpdateCurrentState()
     {
-        if (Physics2D.OverlapPoint(Feet.transform.position, LayerMask.GetMask("Terrain")))
+        if (Physics2D.OverlapCollider(Feet, TerrainContactFilter, new Collider2D[1]) > 0)
             CurrentState = State.Grounded;
         else if (VerticalVelocity > 0.0f)
             CurrentState = State.Jumping;
         else
             CurrentState = State.Falling;
+
+        // Prevent sticking to ceiling.
+        if (CurrentState == State.Jumping)
+        {
+            if (Physics2D.OverlapCollider(Head, TerrainContactFilter, new Collider2D[1]) > 0)
+            {
+                CurrentState = State.Falling;
+                VerticalVelocity = 0;
+            }
+        }
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -58,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
     public int Jumps;
     int JumpsLeft;
     public float JumpStrength;
+    public float JumpBoostStrength;
     public float JumpBoostTime;
     float JumpBoostTimeLeft;
 
@@ -106,6 +118,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake()
     {
+        Assert.IsNotNull(Head);
+        Assert.IsNotNull(Feet);
+
+        TerrainContactFilter = new ContactFilter2D();
+        TerrainContactFilter.SetLayerMask(LayerMask.GetMask("Terrain"));
+
         RigidBody = GetComponent<Rigidbody2D>();
         Assert.IsNotNull(RigidBody);
     }
@@ -136,7 +154,9 @@ public class PlayerMovement : MonoBehaviour
             else
                 JumpBoostTimeLeft = 0.0f;
 
-            if (JumpBoostTimeLeft <= 0.0f)
+            if (JumpBoostTimeLeft > 0.0f)
+                VerticalVelocity += JumpBoostStrength * Time.fixedDeltaTime;
+            else
                 VerticalVelocity -= Gravity * Time.fixedDeltaTime;
         }
         else if (CurrentState == State.Falling)
@@ -147,6 +167,8 @@ public class PlayerMovement : MonoBehaviour
 
             VerticalVelocity -= Gravity * Time.fixedDeltaTime;
         }
+
+        VerticalVelocity = Mathf.Max(VerticalVelocity, -MaxFallSpeed);
 
         RigidBody.velocity = new Vector2(MoveVelocity, VerticalVelocity);
 
