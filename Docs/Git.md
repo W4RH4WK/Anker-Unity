@@ -2,8 +2,12 @@
 
 Set your name and email accordingly.
 
-    git config user.name "My Name"
-    git config user.email "My Email"
+    git config --global user.name "My Name"
+    git config --global user.email "My Email"
+
+It is recommended to switch *pull* to *fast-forward only* mode.
+
+    git config --global pull.ff only
 
 Also disable tracking of executable permissions.
 This is helpful when running Git from within [WSL](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux).
