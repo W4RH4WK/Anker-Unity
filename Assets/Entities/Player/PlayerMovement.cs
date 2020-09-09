@@ -9,10 +9,32 @@ public class PlayerMovement : MonoBehaviour
         Grounded,
         Jumping,
         Falling,
+        Dashing,
     }
 
     State CurrentState = State.Grounded;
     bool IsGrounded => CurrentState == State.Grounded;
+    bool IsDashing => CurrentState == State.Dashing;
+
+    enum Orientation
+    {
+        Right,
+        Left,
+    }
+
+    static Orientation InvertOrientation(Orientation orientation)
+    {
+        switch (orientation)
+        {
+        case Orientation.Left:
+            return Orientation.Right;
+        case Orientation.Right:
+            return Orientation.Left;
+        }
+        return Orientation.Left;
+    }
+
+    Orientation LookDirection = Orientation.Right;
 
     public Collider2D Head;
     public Collider2D Feet;
@@ -20,7 +42,9 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateCurrentState()
     {
-        if (Physics2D.OverlapCollider(Feet, TerrainContactFilter, new Collider2D[1]) > 0)
+        if (DashTimeLeft > 0.0f)
+            CurrentState = State.Dashing;
+        else if (Physics2D.OverlapCollider(Feet, TerrainContactFilter, new Collider2D[1]) > 0)
             CurrentState = State.Grounded;
         else if (VerticalVelocity > 0.0f)
             CurrentState = State.Jumping;
@@ -52,6 +76,14 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateMoveVelocity()
     {
+        if (!IsDashing)
+        {
+            if (MoveInput > 0.1f)
+                LookDirection = Orientation.Right;
+            else if (MoveInput < -0.1f)
+                LookDirection = Orientation.Left;
+        }
+
         var responsiveness = MoveResponsiveness;
         if (!IsGrounded)
             responsiveness = MoveResponsivenessInAir;
@@ -87,11 +119,6 @@ public class PlayerMovement : MonoBehaviour
         JumpInputDown = value.isPressed;
     }
 
-    void ResetJumpInputDown()
-    {
-        JumpInputDown = false;
-    }
-
     void Jump()
     {
         if (JumpsLeft <= 0)
@@ -109,6 +136,55 @@ public class PlayerMovement : MonoBehaviour
 
     [Space]
 
+    public int Dashes;
+    int DashesLeft;
+
+    public float DashSpeed;
+    public float DashTime;
+    float DashTimeLeft;
+
+    public float DashCooldown;
+    float DashCooldownLeft;
+
+    Orientation DashDirection;
+
+    bool DashInputDown;
+    void OnDash(InputValue value) => DashInputDown = value.isPressed;
+
+    void Dash()
+    {
+        if (DashesLeft <= 0 || DashCooldownLeft > 0.0f)
+            return;
+
+        DashDirection = LookDirection;
+
+        // Backdash on ground without input.
+        if (IsGrounded && Mathf.Abs(MoveInput) <= 0.1f)
+            DashDirection = InvertOrientation(LookDirection);
+
+        CurrentState = State.Dashing;
+
+        DashesLeft--;
+        DashTimeLeft = DashTime;
+        DashCooldownLeft = DashCooldown;
+    }
+
+    void UpdateDash()
+    {
+        DashCooldownLeft -= Time.fixedDeltaTime;
+        DashTimeLeft -= Time.fixedDeltaTime;
+
+        if (IsGrounded)
+            DashesLeft = Dashes;
+
+        if (IsDashing)
+            MoveVelocity = (DashDirection == Orientation.Right ? 1.0f : -1.0f) * DashSpeed;
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+
+    [Space]
+
     public float CoyoteTime;
     float CoyoteTimeLeft;
 
@@ -118,6 +194,14 @@ public class PlayerMovement : MonoBehaviour
             CoyoteTimeLeft = CoyoteTime;
         else
             CoyoteTimeLeft -= Time.fixedDeltaTime;
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+
+    void ResetInputDown()
+    {
+        JumpInputDown = false;
+        DashInputDown = false;
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -141,9 +225,13 @@ public class PlayerMovement : MonoBehaviour
         UpdateCurrentState();
         UpdateCoyoteTime();
         UpdateMoveVelocity();
+        UpdateDash();
 
         if (JumpInputDown)
             Jump();
+
+        if (DashInputDown)
+            Dash();
 
         if (CurrentState == State.Grounded)
         {
@@ -180,6 +268,6 @@ public class PlayerMovement : MonoBehaviour
 
         RigidBody.velocity = new Vector2(MoveVelocity, VerticalVelocity);
 
-        ResetJumpInputDown();
+        ResetInputDown();
     }
 }
