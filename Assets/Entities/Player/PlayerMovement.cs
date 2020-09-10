@@ -16,24 +16,6 @@ public class PlayerMovement : MonoBehaviour
     bool IsGrounded => CurrentState == State.Grounded;
     bool IsDashing => CurrentState == State.Dashing;
 
-    enum Orientation
-    {
-        Right,
-        Left,
-    }
-
-    static Orientation InvertOrientation(Orientation orientation)
-    {
-        switch (orientation)
-        {
-        case Orientation.Left:
-            return Orientation.Right;
-        case Orientation.Right:
-            return Orientation.Left;
-        }
-        return Orientation.Left;
-    }
-
     Orientation LookDirection = Orientation.Right;
 
     public Collider2D Head;
@@ -77,12 +59,7 @@ public class PlayerMovement : MonoBehaviour
     void UpdateMoveVelocity()
     {
         if (!IsDashing)
-        {
-            if (MoveInput > 0.1f)
-                LookDirection = Orientation.Right;
-            else if (MoveInput < -0.1f)
-                LookDirection = Orientation.Left;
-        }
+            LookDirection = LookDirection.FromFactor(MoveInput);
 
         var responsiveness = MoveResponsiveness;
         if (!IsGrounded)
@@ -158,9 +135,9 @@ public class PlayerMovement : MonoBehaviour
 
         DashDirection = LookDirection;
 
-        // Backdash on ground without input.
+        // Backdash on ground without move input.
         if (IsGrounded && Mathf.Abs(MoveInput) <= 0.1f)
-            DashDirection = InvertOrientation(LookDirection);
+            DashDirection = LookDirection.Inverse();
 
         CurrentState = State.Dashing;
 
@@ -178,7 +155,7 @@ public class PlayerMovement : MonoBehaviour
             DashesLeft = Dashes;
 
         if (IsDashing)
-            MoveVelocity = (DashDirection == Orientation.Right ? 1.0f : -1.0f) * DashSpeed;
+            MoveVelocity = DashDirection.ToFactor() * DashSpeed;
     }
 
     //////////////////////////////////////////////////////////////////////////
