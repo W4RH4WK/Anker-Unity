@@ -32,16 +32,6 @@ public class PlayerMovement : MonoBehaviour
             CurrentState = State.Grounded;
         else
             CurrentState = State.Falling;
-
-        // Prevent sticking to ceiling.
-        if (CurrentState == State.Jumping)
-        {
-            if (Physics2D.OverlapCollider(Head, TerrainContactFilter, new Collider2D[1]) > 0)
-            {
-                CurrentState = State.Falling;
-                VerticalVelocity = 0;
-            }
-        }
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -56,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
     float MoveInput;
     void OnMove(InputValue value) => MoveInput = value.Get<float>();
 
-    void UpdateMoveVelocity()
+    void UpdateMove()
     {
         if (!IsDashing)
             LookDirection = LookDirection.FromFactor(MoveInput);
@@ -88,6 +78,9 @@ public class PlayerMovement : MonoBehaviour
     public float JumpBoostTime;
     float JumpBoostTimeLeft;
 
+    public float CoyoteTime;
+    float CoyoteTimeLeft;
+
     bool JumpInput;
     void OnJump(InputValue value)
     {
@@ -107,15 +100,41 @@ public class PlayerMovement : MonoBehaviour
         JumpBoostTimeLeft = JumpBoostTime;
     }
 
-    public float CoyoteTime;
-    float CoyoteTimeLeft;
-
-    void UpdateCoyoteTime()
+    void UpdateJump()
     {
+        // update coyote time
         if (IsGrounded)
             CoyoteTimeLeft = CoyoteTime;
         else
             CoyoteTimeLeft -= Time.fixedDeltaTime;
+
+        // update jumps
+        if (IsGrounded)
+            JumpsLeft = Jumps;
+
+        // update jump boost time
+        if (IsGrounded)
+            JumpBoostTimeLeft = JumpBoostTime;
+        else if (!JumpInput)
+            JumpBoostTimeLeft = 0.0f;
+        else
+            JumpBoostTimeLeft -= Time.fixedDeltaTime;
+
+        // We loose one jump when falling (and coyote-time has passed).
+        if (CurrentState == State.Falling && CoyoteTimeLeft <= 0.0f && JumpsLeft == Jumps)
+            JumpsLeft--;
+
+        if (CurrentState == State.Jumping)
+        {
+            if (JumpBoostTimeLeft > 0.0f)
+                VerticalVelocity += JumpBoostStrength * Time.fixedDeltaTime;
+            else
+                VerticalVelocity -= Gravity * Time.fixedDeltaTime;
+
+            // Prevent sticking to ceiling.
+            if (Physics2D.OverlapCollider(Head, TerrainContactFilter, new Collider2D[1]) > 0)
+                VerticalVelocity = 0;
+        }
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -187,40 +206,17 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         UpdateCurrentState();
-        UpdateCoyoteTime();
-        UpdateMoveVelocity();
+
+        UpdateMove();
+        UpdateJump();
         UpdateDash();
 
-        if (CurrentState == State.Grounded)
-        {
-            // Always reset jumps when grounded.
-            JumpsLeft = Jumps;
-
-            // Add slight downward velocity to prevent peter-panning.
+        // Add slight downward velocity to prevent peter-panning.
+        if (IsGrounded)
             VerticalVelocity = -0.1f;
-        }
-        else if (CurrentState == State.Jumping)
-        {
-            // Holding jump for longer makes you go higher.
 
-            if (JumpInput)
-                JumpBoostTimeLeft -= Time.fixedDeltaTime;
-            else
-                JumpBoostTimeLeft = 0.0f;
-
-            if (JumpBoostTimeLeft > 0.0f)
-                VerticalVelocity += JumpBoostStrength * Time.fixedDeltaTime;
-            else
-                VerticalVelocity -= Gravity * Time.fixedDeltaTime;
-        }
-        else if (CurrentState == State.Falling)
-        {
-            // We loose one jump when falling (and coyote-time has passed).
-            if (CoyoteTimeLeft < 0.0f && JumpsLeft == Jumps)
-                JumpsLeft--;
-
+        if (CurrentState == State.Falling)
             VerticalVelocity -= Gravity * Time.fixedDeltaTime;
-        }
 
         VerticalVelocity = Mathf.Max(VerticalVelocity, -MaxFallSpeed);
 
