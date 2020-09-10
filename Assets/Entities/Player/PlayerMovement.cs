@@ -109,6 +109,17 @@ public class PlayerMovement : MonoBehaviour
         JumpBoostTimeLeft = JumpBoostTime;
     }
 
+    public float CoyoteTime;
+    float CoyoteTimeLeft;
+
+    void UpdateCoyoteTime()
+    {
+        if (IsGrounded)
+            CoyoteTimeLeft = CoyoteTime;
+        else
+            CoyoteTimeLeft -= Time.fixedDeltaTime;
+    }
+
     //////////////////////////////////////////////////////////////////////////
 
     [Space]
@@ -156,21 +167,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (IsDashing)
             MoveVelocity = DashDirection.ToFactor() * DashSpeed;
-    }
-
-    //////////////////////////////////////////////////////////////////////////
-
-    [Space]
-
-    public float CoyoteTime;
-    float CoyoteTimeLeft;
-
-    void UpdateCoyoteTime()
-    {
-        if (IsGrounded)
-            CoyoteTimeLeft = CoyoteTime;
-        else
-            CoyoteTimeLeft -= Time.fixedDeltaTime;
     }
 
     //////////////////////////////////////////////////////////////////////////
