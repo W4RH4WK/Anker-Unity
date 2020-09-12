@@ -6,14 +6,16 @@ public class PlayerMovement : MonoBehaviour
 {
     enum State
     {
-        Grounded,
+        Standing,
+        Crouching,
         Jumping,
         Falling,
         Dashing,
     }
 
-    State CurrentState = State.Grounded;
-    bool IsGrounded => CurrentState == State.Grounded;
+    State CurrentState = State.Standing;
+    bool IsGrounded => CurrentState == State.Standing || CurrentState == State.Crouching;
+    bool IsCrouching => CurrentState == State.Crouching;
     bool IsDashing => CurrentState == State.Dashing;
 
     Orientation LookDirection = Orientation.Right;
@@ -29,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
         else if (VerticalVelocity > 0.0f)
             CurrentState = State.Jumping;
         else if (Physics2D.OverlapCollider(Feet, TerrainContactFilter, new Collider2D[1]) > 0)
-            CurrentState = State.Grounded;
+            CurrentState = CrouchInput ? State.Crouching : State.Standing;
         else
             CurrentState = State.Falling;
     }
@@ -48,8 +50,14 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateMove()
     {
-        if (!IsDashing)
+        if (!IsDashing && !IsCrouchSliding)
             LookDirection = LookDirection.FromFactor(MoveInput);
+
+        if (IsCrouching)
+        {
+            MoveVelocity = 0.0f;
+            return;
+        }
 
         var responsiveness = MoveResponsiveness;
         if (!IsGrounded)
@@ -57,6 +65,50 @@ public class PlayerMovement : MonoBehaviour
 
         var newMoveVelocity = MoveSpeed * MoveInput;
         MoveVelocity -= responsiveness * (MoveVelocity - newMoveVelocity);
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+
+    [Space]
+
+    public Vector3 CrouchScale;
+    Vector3 BaseScale;
+    public float CrouchSlideSpeed;
+    public float CrouchSlideTime;
+    float CrouchSlideTimeLeft;
+    public float CrouchSlideCooldown;
+    float CrouchSlideCooldownLeft;
+
+    bool IsCrouchSliding => CrouchSlideTimeLeft > 0.0f;
+
+    bool CrouchInput;
+    void OnCrouch(InputValue value) => CrouchInput = value.isPressed;
+
+    void CrouchSlide()
+    {
+        if (CrouchSlideTimeLeft > 0.0f || CrouchSlideCooldownLeft > 0.0f || !IsCrouching)
+            return;
+
+        CrouchSlideTimeLeft = CrouchSlideTime;
+        CrouchSlideCooldownLeft = CrouchSlideCooldown;
+    }
+
+    void UpdateCrouch()
+    {
+        CrouchSlideCooldownLeft -= Time.fixedDeltaTime;
+        CrouchSlideTimeLeft -= Time.fixedDeltaTime;
+
+        // Stop crouch slide when sliding over edge.
+        if (CurrentState == State.Falling)
+            CrouchSlideTimeLeft = 0.0f;
+
+        if (IsGrounded && CrouchInput)
+            transform.localScale = CrouchScale;
+        else
+            transform.localScale = BaseScale;
+
+        if (CrouchSlideTimeLeft > 0.0f)
+            MoveVelocity = LookDirection.ToFactor() * CrouchSlideSpeed;
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -86,7 +138,12 @@ public class PlayerMovement : MonoBehaviour
     {
         JumpInput = value.isPressed;
         if (value.isPressed)
-            Jump();
+        {
+            if (IsCrouching)
+                CrouchSlide();
+            else
+                Jump();
+        }
     }
 
     void Jump()
@@ -161,7 +218,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Dash()
     {
-        if (DashesLeft <= 0 || DashCooldownLeft > 0.0f)
+        if (DashesLeft <= 0 || DashCooldownLeft > 0.0f || IsCrouching)
             return;
 
         DashDirection = LookDirection;
@@ -199,6 +256,8 @@ public class PlayerMovement : MonoBehaviour
         TerrainContactFilter = new ContactFilter2D();
         TerrainContactFilter.SetLayerMask(LayerMask.GetMask("Terrain"));
 
+        BaseScale = transform.localScale;
+
         RigidBody = GetComponent<Rigidbody2D>();
         Assert.IsNotNull(RigidBody);
     }
@@ -208,6 +267,7 @@ public class PlayerMovement : MonoBehaviour
         UpdateCurrentState();
 
         UpdateMove();
+        UpdateCrouch();
         UpdateJump();
         UpdateDash();
 
