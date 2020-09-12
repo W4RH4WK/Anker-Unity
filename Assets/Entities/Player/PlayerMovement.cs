@@ -4,37 +4,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    enum State
-    {
-        Standing,
-        Crouching,
-        Jumping,
-        Falling,
-        Dashing,
-    }
-
-    State CurrentState = State.Standing;
-    bool IsGrounded => CurrentState == State.Standing || CurrentState == State.Crouching;
-    bool IsCrouching => CurrentState == State.Crouching;
-    bool IsDashing => CurrentState == State.Dashing;
-
-    Orientation LookDirection = Orientation.Right;
-
     public Collider2D Head;
     public Collider2D Feet;
-    ContactFilter2D TerrainContactFilter;
 
-    void UpdateCurrentState()
-    {
-        if (DashTimeLeft > 0.0f)
-            CurrentState = State.Dashing;
-        else if (VerticalVelocity > 0.0f)
-            CurrentState = State.Jumping;
-        else if (Physics2D.OverlapCollider(Feet, TerrainContactFilter, new Collider2D[1]) > 0)
-            CurrentState = CrouchInput ? State.Crouching : State.Standing;
-        else
-            CurrentState = State.Falling;
-    }
+    Orientation LookDirection = Orientation.Right;
 
     //////////////////////////////////////////////////////////////////////////
 
@@ -79,6 +52,7 @@ public class PlayerMovement : MonoBehaviour
     public float CrouchSlideCooldown;
     float CrouchSlideCooldownLeft;
 
+    bool IsCrouching => IsGrounded && CrouchInput;
     bool IsCrouchSliding => CrouchSlideTimeLeft > 0.0f;
 
     bool CrouchInput;
@@ -98,14 +72,14 @@ public class PlayerMovement : MonoBehaviour
         CrouchSlideCooldownLeft -= Time.fixedDeltaTime;
         CrouchSlideTimeLeft -= Time.fixedDeltaTime;
 
-        // Stop crouch slide when sliding over edge.
-        if (CurrentState == State.Falling)
-            CrouchSlideTimeLeft = 0.0f;
-
-        if (IsGrounded && CrouchInput)
+        if (IsCrouching)
             transform.localScale = CrouchScale;
         else
             transform.localScale = BaseScale;
+
+        // Stop crouch slide when sliding over edge.
+        if (IsFalling)
+            CrouchSlideTimeLeft = 0.0f;
 
         if (CrouchSlideTimeLeft > 0.0f)
             MoveVelocity = LookDirection.ToFactor() * CrouchSlideSpeed;
@@ -119,6 +93,25 @@ public class PlayerMovement : MonoBehaviour
     public float MaxFallSpeed;
     float VerticalVelocity;
 
+    bool IsGrounded;
+    ContactFilter2D TerrainContactFilter;
+
+    void UpdateIsGrounded()
+    {
+        IsGrounded = Physics2D.OverlapCollider(Feet, TerrainContactFilter, new Collider2D[1]) > 0;
+    }
+
+    void UpdateFalling()
+    {
+        if (IsJumping || IsDashing)
+            return;
+
+        if (IsGrounded)
+            VerticalVelocity = 0.0f;
+        else
+            VerticalVelocity -= Gravity * Time.fixedDeltaTime;
+    }
+
     //////////////////////////////////////////////////////////////////////////
 
     [Space]
@@ -129,6 +122,9 @@ public class PlayerMovement : MonoBehaviour
     public float JumpBoostStrength;
     public float JumpBoostTime;
     float JumpBoostTimeLeft;
+
+    bool IsJumping => VerticalVelocity > 0.0f;
+    bool IsFalling => VerticalVelocity < 0.0f;
 
     public float CoyoteTime;
     float CoyoteTimeLeft;
@@ -178,10 +174,10 @@ public class PlayerMovement : MonoBehaviour
             JumpBoostTimeLeft -= Time.fixedDeltaTime;
 
         // We loose one jump when falling (and coyote-time has passed).
-        if (CurrentState == State.Falling && CoyoteTimeLeft <= 0.0f && JumpsLeft == Jumps)
+        if (IsFalling && CoyoteTimeLeft <= 0.0f && JumpsLeft == Jumps)
             JumpsLeft--;
 
-        if (CurrentState == State.Jumping)
+        if (IsJumping)
         {
             if (JumpBoostTimeLeft > 0.0f)
                 VerticalVelocity += JumpBoostStrength * Time.fixedDeltaTime;
@@ -200,15 +196,15 @@ public class PlayerMovement : MonoBehaviour
 
     public int Dashes;
     int DashesLeft;
-
     public float DashSpeed;
     public float DashTime;
     float DashTimeLeft;
-
     public float DashCooldown;
     float DashCooldownLeft;
 
     Orientation DashDirection;
+
+    bool IsDashing => DashTimeLeft > 0.0f;
 
     void OnDash(InputValue value)
     {
@@ -264,19 +260,13 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        UpdateCurrentState();
+        UpdateIsGrounded();
 
         UpdateMove();
         UpdateCrouch();
+        UpdateFalling();
         UpdateJump();
         UpdateDash();
-
-        // Add slight downward velocity to prevent peter-panning.
-        if (IsGrounded)
-            VerticalVelocity = -0.1f;
-
-        if (CurrentState == State.Falling)
-            VerticalVelocity -= Gravity * Time.fixedDeltaTime;
 
         VerticalVelocity = Mathf.Max(VerticalVelocity, -MaxFallSpeed);
 
