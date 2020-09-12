@@ -633,7 +633,7 @@ GameObject:
   - component: {fileID: 1182291593}
   - component: {fileID: 1182291595}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Player Steve
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -739,6 +739,7 @@ MonoBehaviour:
   DashSpeed: 50
   DashTime: 0.05
   DashCooldown: 0.2
+  GroundSlamSpeed: 80
 --- !u!1 &1195859252
 GameObject:
   m_ObjectHideFlags: 0

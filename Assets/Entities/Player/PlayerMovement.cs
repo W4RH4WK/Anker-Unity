@@ -103,13 +103,15 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateFalling()
     {
-        if (IsJumping || IsDashing)
+        if (IsJumping || IsDashing || IsGroundSlamming)
             return;
 
         if (IsGrounded)
             VerticalVelocity = 0.0f;
         else
             VerticalVelocity -= Gravity * Time.fixedDeltaTime;
+
+        VerticalVelocity = Mathf.Max(VerticalVelocity, -MaxFallSpeed);
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -209,7 +211,12 @@ public class PlayerMovement : MonoBehaviour
     void OnDash(InputValue value)
     {
         if (value.isPressed)
-            Dash();
+        {
+            if (CrouchInput)
+                GroundSlam();
+            else
+                Dash();
+        }
     }
 
     void Dash()
@@ -242,6 +249,29 @@ public class PlayerMovement : MonoBehaviour
 
     //////////////////////////////////////////////////////////////////////////
 
+    [Space]
+
+    public float GroundSlamSpeed;
+    bool IsGroundSlamming;
+
+    void GroundSlam()
+    {
+        IsGroundSlamming = true;
+    }
+
+    void UpdateGroundSlam()
+    {
+        if (!IsGroundSlamming)
+            return;
+
+        if (IsGrounded)
+            IsGroundSlamming = false;
+        else
+            VerticalVelocity = -GroundSlamSpeed;
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+
     Rigidbody2D RigidBody;
 
     void Awake()
@@ -264,11 +294,10 @@ public class PlayerMovement : MonoBehaviour
 
         UpdateMove();
         UpdateCrouch();
+        UpdateGroundSlam();
         UpdateFalling();
         UpdateJump();
         UpdateDash();
-
-        VerticalVelocity = Mathf.Max(VerticalVelocity, -MaxFallSpeed);
 
         RigidBody.velocity = new Vector2(MoveVelocity, VerticalVelocity);
     }
