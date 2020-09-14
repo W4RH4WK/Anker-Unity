@@ -136,12 +136,7 @@ public class PlayerMovement : MonoBehaviour
     {
         JumpInput = value.isPressed;
         if (value.isPressed)
-        {
-            if (IsCrouching)
-                CrouchSlide();
-            else
-                Jump();
-        }
+            Jump();
     }
 
     void Jump()
@@ -212,7 +207,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (value.isPressed)
         {
-            if (CrouchInput)
+            if (IsFalling && CrouchInput)
                 GroundSlam();
             else
                 Dash();
@@ -221,16 +216,17 @@ public class PlayerMovement : MonoBehaviour
 
     void Dash()
     {
-        if (DashesLeft <= 0 || DashCooldownLeft > 0.0f || IsCrouching)
+        if (DashesLeft <= 0 || DashCooldownLeft > 0.0f)
             return;
 
         DashDirection = LookDirection;
 
         // Backdash on ground without move input.
-        if (IsGrounded && Mathf.Abs(MoveInput) <= 0.1f)
+        if (IsGrounded && !IsCrouching && Mathf.Abs(MoveInput) <= 0.1f)
             DashDirection = LookDirection.Inverse();
 
         DashesLeft--;
+
         DashTimeLeft = DashTime;
         DashCooldownLeft = DashCooldown;
     }
