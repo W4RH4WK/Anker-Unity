@@ -39,10 +39,10 @@
                 },
                 {
                     "name": "Anchor",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "d669ad17-110a-498c-bec3-89b46112dea2",
-                    "expectedControlType": "Button",
-                    "processors": "",
+                    "expectedControlType": "Stick",
+                    "processors": "StickDeadzone",
                     "interactions": ""
                 }
             ],
@@ -182,18 +182,7 @@
                 {
                     "name": "",
                     "id": "c7f5e76d-d4e5-419c-8a27-4f80261910d1",
-                    "path": "<Gamepad>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Anchor",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8f00242c-5520-4415-a8b7-066355518f5e",
-                    "path": "<Keyboard>/x",
+                    "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

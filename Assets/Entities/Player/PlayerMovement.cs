@@ -281,15 +281,27 @@ public class PlayerMovement : MonoBehaviour
 
     AnchorRadius AnchorRadiusScript;
 
-    void OnAnchor()
+    Vector2 DebugAnchorInput;
+
+    void OnAnchor(InputValue value)
     {
-        var pointsInRange = AnchorRadiusScript.AnchorPointsInRange;
-        if (pointsInRange.Count > 0)
-            ActiveAnchorPoint = pointsInRange[0];
+        var input = value.Get<Vector2>();
+
+        if (input.magnitude > 0.0f)
+            DebugAnchorInput = input.normalized;
+
+        if (input.magnitude == 1.0f)
+        {
+            var pointsInRange = AnchorRadiusScript.AnchorPointsInRange;
+            if (pointsInRange.Count > 0)
+                ActiveAnchorPoint = pointsInRange[0];
+        }
     }
 
     void UpdateAnchor()
     {
+        Debug.DrawLine(RigidBody.position, 3.0f * DebugAnchorInput + RigidBody.position);
+
         if (!ActiveAnchorPoint)
             return;
 
