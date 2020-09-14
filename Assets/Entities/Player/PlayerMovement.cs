@@ -18,13 +18,13 @@ public class PlayerMovement : MonoBehaviour
     public float MoveResponsivenessInAir;
     float MoveVelocity;
 
-    float MoveInput;
-    void OnMove(InputValue value) => MoveInput = value.Get<float>();
+    Vector2 MoveInput;
+    void OnMove(InputValue value) => MoveInput = value.Get<Vector2>();
 
     void UpdateMove()
     {
         if (!IsDashing && !IsCrouchSliding)
-            LookDirection = LookDirection.FromFactor(MoveInput);
+            LookDirection = LookDirection.FromFactor(MoveInput.x);
 
         if (IsCrouching)
         {
@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
         if (!IsGrounded)
             responsiveness = MoveResponsivenessInAir;
 
-        var newMoveVelocity = MoveSpeed * MoveInput;
+        var newMoveVelocity = MoveSpeed * MoveInput.x;
         MoveVelocity -= responsiveness * (MoveVelocity - newMoveVelocity);
     }
 
@@ -55,8 +55,8 @@ public class PlayerMovement : MonoBehaviour
     bool IsCrouching => IsGrounded && CrouchInput;
     bool IsCrouchSliding => CrouchSlideTimeLeft > 0.0f;
 
-    bool CrouchInput;
-    void OnCrouch(InputValue value) => CrouchInput = value.isPressed;
+    bool CrouchInput => MoveInput.y < -0.5f;
+    //void OnCrouch(InputValue value) => CrouchInput = value.isPressed;
 
     void CrouchSlide()
     {
@@ -227,7 +227,7 @@ public class PlayerMovement : MonoBehaviour
         DashDirection = LookDirection;
 
         // Backdash on ground without move input.
-        if (IsGrounded && Mathf.Abs(MoveInput) <= 0.1f)
+        if (IsGrounded && Mathf.Abs(MoveInput.x) <= 0.1f)
             DashDirection = LookDirection.Inverse();
 
         DashesLeft--;
