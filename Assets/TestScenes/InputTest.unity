@@ -724,22 +724,12 @@ MonoBehaviour:
   MoveSpeed: 10
   MoveResponsiveness: 0.32
   MoveResponsivenessInAir: 0.16
-  CrouchScale: {x: 1.2, y: 0.5, z: 1}
-  CrouchSlideSpeed: 20
-  CrouchSlideTime: 0.22
-  CrouchSlideCooldown: 0.5
   Gravity: 80
   MaxFallSpeed: 40
-  Jumps: 2
-  JumpStrength: 10
-  JumpBoostStrength: 50
-  JumpBoostTime: 0.12
-  CoyoteTime: 0.15
   Dashes: 2
-  DashSpeed: 50
-  DashTime: 0.05
+  DashSpeed: {x: 40, y: 80}
+  DashTime: 0.1
   DashCooldown: 0.2
-  GroundSlamSpeed: 80
 --- !u!1 &1195859252
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
+[SelectionBase]
 public class PlayerMovement : MonoBehaviour
 {
     public Collider2D Head;
@@ -16,74 +17,80 @@ public class PlayerMovement : MonoBehaviour
     public float MoveSpeed;
     public float MoveResponsiveness;
     public float MoveResponsivenessInAir;
-    float MoveVelocity;
+    float HorizontalVelocity;
 
-    float MoveInput;
-    void OnMove(InputValue value) => MoveInput = value.Get<float>();
+    Vector2 MoveInput;
+    void OnMove(InputValue value) => MoveInput = value.Get<Vector2>();
 
     void UpdateMove()
     {
-        if (!IsDashing && !IsCrouchSliding)
-            LookDirection = LookDirection.FromFactor(MoveInput);
+        // if (!IsDashing)
+        //    LookDirection = LookDirection.FromFactor(MoveInput);
 
-        if (IsCrouching)
-        {
-            MoveVelocity = 0.0f;
-            return;
-        }
+        // if (IsCrouching)
+        //{
+        //    HorizontalVelocity = 0.0f;
+        //    return;
+        //}
 
         var responsiveness = MoveResponsiveness;
         if (!IsGrounded)
             responsiveness = MoveResponsivenessInAir;
 
-        var newMoveVelocity = MoveSpeed * MoveInput;
-        MoveVelocity -= responsiveness * (MoveVelocity - newMoveVelocity);
+        // Unity's stick deadzone is radial, here we only require horizontal
+        // deadzoning.
+        var horizontalMoveInput = MoveInput.x;
+        if (Mathf.Abs(horizontalMoveInput) < 0.2f)
+            horizontalMoveInput = 0.0f;
+
+        var newHorizontalVelocity = MoveSpeed * horizontalMoveInput;
+        HorizontalVelocity -= responsiveness * (HorizontalVelocity - newHorizontalVelocity);
     }
 
     //////////////////////////////////////////////////////////////////////////
 
-    [Space]
+    //[Space]
 
-    public Vector3 CrouchScale;
-    Vector3 BaseScale;
-    public float CrouchSlideSpeed;
-    public float CrouchSlideTime;
-    float CrouchSlideTimeLeft;
-    public float CrouchSlideCooldown;
-    float CrouchSlideCooldownLeft;
+    // public Vector3 CrouchScale;
+    // Vector3 BaseScale;
+    // public float CrouchSlideSpeed;
+    // public float CrouchSlideTime;
+    // float CrouchSlideTimeLeft;
+    // public float CrouchSlideCooldown;
+    // float CrouchSlideCooldownLeft;
 
-    bool IsCrouching => IsGrounded && CrouchInput;
-    bool IsCrouchSliding => CrouchSlideTimeLeft > 0.0f;
+    // bool IsCrouching => IsGrounded && CrouchInput;
+    // bool IsCrouchSliding => CrouchSlideTimeLeft > 0.0f;
 
-    bool CrouchInput;
-    void OnCrouch(InputValue value) => CrouchInput = value.isPressed;
+    // bool CrouchInput;
+    // void OnCrouch(InputValue value) => CrouchInput = value.isPressed;
 
-    void CrouchSlide()
-    {
-        if (CrouchSlideTimeLeft > 0.0f || CrouchSlideCooldownLeft > 0.0f || !IsCrouching)
-            return;
+    // void CrouchSlide()
+    //{
+    //    if (CrouchSlideTimeLeft > 0.0f || CrouchSlideCooldownLeft > 0.0f || !IsCrouching)
+    //        return;
 
-        CrouchSlideTimeLeft = CrouchSlideTime;
-        CrouchSlideCooldownLeft = CrouchSlideCooldown;
-    }
+    //    CrouchSlideTimeLeft = CrouchSlideTime;
+    //    CrouchSlideCooldownLeft = CrouchSlideCooldown;
+    //}
 
-    void UpdateCrouch()
-    {
-        CrouchSlideCooldownLeft -= Time.fixedDeltaTime;
-        CrouchSlideTimeLeft -= Time.fixedDeltaTime;
+    // void UpdateCrouch()
+    //{
+    //    CrouchSlideCooldownLeft -= Time.fixedDeltaTime;
+    //    CrouchSlideTimeLeft -= Time.fixedDeltaTime;
 
-        if (IsCrouching)
-            transform.localScale = CrouchScale;
-        else
-            transform.localScale = BaseScale;
+    //    if (IsCrouching)
+    //        transform.localScale = CrouchScale;
+    //    else
+    //        transform.localScale = BaseScale;
 
-        // Stop crouch slide when sliding over edge.
-        if (IsFalling)
-            CrouchSlideTimeLeft = 0.0f;
+    //    // Stop crouch slide when sliding over edge.
+    //    if (IsFalling)
+    //        CrouchSlideTimeLeft = 0.0f;
 
-        if (CrouchSlideTimeLeft > 0.0f)
-            MoveVelocity = LookDirection.ToFactor() * CrouchSlideSpeed;
-    }
+    //    if (CrouchSlideTimeLeft > 0.0f)
+    //        HorizontalVelocity = LookDirection.ToFactor() * CrouchSlideSpeed;
+    //}
 
     //////////////////////////////////////////////////////////////////////////
 
@@ -103,7 +110,8 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateFalling()
     {
-        if (IsJumping || IsDashing || IsGroundSlamming)
+        // if (IsJumping || IsDashing || IsGroundSlamming)
+        if (IsDashing)
             return;
 
         if (IsGrounded)
@@ -116,81 +124,81 @@ public class PlayerMovement : MonoBehaviour
 
     //////////////////////////////////////////////////////////////////////////
 
-    [Space]
+    //[Space]
 
-    public int Jumps;
-    int JumpsLeft;
-    public float JumpStrength;
-    public float JumpBoostStrength;
-    public float JumpBoostTime;
-    float JumpBoostTimeLeft;
+    // public int Jumps;
+    // int JumpsLeft;
+    // public float JumpStrength;
+    // public float JumpBoostStrength;
+    // public float JumpBoostTime;
+    // float JumpBoostTimeLeft;
 
-    bool IsJumping => VerticalVelocity > 0.0f;
-    bool IsFalling => VerticalVelocity < 0.0f;
+    // bool IsJumping => VerticalVelocity > 0.0f;
+    // bool IsFalling => VerticalVelocity < 0.0f;
 
-    public float CoyoteTime;
-    float CoyoteTimeLeft;
+    // public float CoyoteTime;
+    // float CoyoteTimeLeft;
 
-    bool JumpInput;
-    void OnJump(InputValue value)
-    {
-        JumpInput = value.isPressed;
-        if (value.isPressed)
-        {
-            if (IsCrouching)
-                CrouchSlide();
-            else
-                Jump();
-        }
-    }
+    // bool JumpInput;
+    // void OnJump(InputValue value)
+    //{
+    //    JumpInput = value.isPressed;
+    //    if (value.isPressed)
+    //    {
+    //        if (IsCrouching)
+    //            CrouchSlide();
+    //        else
+    //            Jump();
+    //    }
+    //}
 
-    void Jump()
-    {
-        if (JumpsLeft <= 0)
-            return;
+    // void Jump()
+    //{
+    //    if (JumpsLeft <= 0)
+    //        return;
 
-        JumpsLeft--;
+    //    JumpsLeft--;
 
-        VerticalVelocity = JumpStrength;
-        JumpBoostTimeLeft = JumpBoostTime;
-    }
+    //    VerticalVelocity = JumpStrength;
+    //    JumpBoostTimeLeft = JumpBoostTime;
+    //}
 
-    void UpdateJump()
-    {
-        // update coyote time
-        if (IsGrounded)
-            CoyoteTimeLeft = CoyoteTime;
-        else
-            CoyoteTimeLeft -= Time.fixedDeltaTime;
+    // void UpdateJump()
+    //{
+    //    // update coyote time
+    //    if (IsGrounded)
+    //        CoyoteTimeLeft = CoyoteTime;
+    //    else
+    //        CoyoteTimeLeft -= Time.fixedDeltaTime;
 
-        // update jumps
-        if (IsGrounded)
-            JumpsLeft = Jumps;
+    //    // update jumps
+    //    if (IsGrounded)
+    //        JumpsLeft = Jumps;
 
-        // update jump boost time
-        if (IsGrounded)
-            JumpBoostTimeLeft = JumpBoostTime;
-        else if (!JumpInput)
-            JumpBoostTimeLeft = 0.0f;
-        else
-            JumpBoostTimeLeft -= Time.fixedDeltaTime;
+    //    // update jump boost time
+    //    if (IsGrounded)
+    //        JumpBoostTimeLeft = JumpBoostTime;
+    //    else if (!JumpInput)
+    //        JumpBoostTimeLeft = 0.0f;
+    //    else
+    //        JumpBoostTimeLeft -= Time.fixedDeltaTime;
 
-        // We loose one jump when falling (and coyote-time has passed).
-        if (IsFalling && CoyoteTimeLeft <= 0.0f && JumpsLeft == Jumps)
-            JumpsLeft--;
+    //    // We loose one jump when falling (and coyote-time has passed).
+    //    if (IsFalling && CoyoteTimeLeft <= 0.0f && JumpsLeft == Jumps)
+    //        JumpsLeft--;
 
-        if (IsJumping)
-        {
-            if (JumpBoostTimeLeft > 0.0f)
-                VerticalVelocity += JumpBoostStrength * Time.fixedDeltaTime;
-            else
-                VerticalVelocity -= Gravity * Time.fixedDeltaTime;
+    //    if (IsJumping)
+    //    {
+    //        if (JumpBoostTimeLeft > 0.0f)
+    //            VerticalVelocity += JumpBoostStrength * Time.fixedDeltaTime;
+    //        else
+    //            VerticalVelocity -= Gravity * Time.fixedDeltaTime;
 
-            // Prevent sticking to ceiling.
-            if (Physics2D.OverlapCollider(Head, TerrainContactFilter, new Collider2D[1]) > 0)
-                VerticalVelocity = 0;
-        }
-    }
+    //        // Prevent sticking to ceiling.
+    //        if (Physics2D.OverlapCollider(Head, TerrainContactFilter, new Collider2D[1]) > 0)
+    //            VerticalVelocity = 0;
+    //    }
+    //}
 
     //////////////////////////////////////////////////////////////////////////
 
@@ -198,37 +206,36 @@ public class PlayerMovement : MonoBehaviour
 
     public int Dashes;
     int DashesLeft;
-    public float DashSpeed;
+    public Vector2 DashSpeed;
     public float DashTime;
     float DashTimeLeft;
     public float DashCooldown;
     float DashCooldownLeft;
 
-    Orientation DashDirection;
+    // Orientation DashDirection;
+    Vector2 DashDirection;
 
     bool IsDashing => DashTimeLeft > 0.0f;
 
     void OnDash(InputValue value)
     {
         if (value.isPressed)
-        {
-            if (CrouchInput)
-                GroundSlam();
-            else
-                Dash();
-        }
+            Dash();
     }
 
     void Dash()
     {
-        if (DashesLeft <= 0 || DashCooldownLeft > 0.0f || IsCrouching)
+        if (DashesLeft <= 0 || DashCooldownLeft > 0.0f)
             return;
 
-        DashDirection = LookDirection;
+        if (MoveInput.magnitude > 0.0f)
+            DashDirection = MoveInput.normalized;
+        else
+            DashDirection = LookDirection.Inverse().ToVector2();
 
         // Backdash on ground without move input.
-        if (IsGrounded && Mathf.Abs(MoveInput) <= 0.1f)
-            DashDirection = LookDirection.Inverse();
+        // if (IsGrounded && Mathf.Abs(MoveInput) <= 0.1f)
+        //    DashDirection = LookDirection.Inverse();
 
         DashesLeft--;
         DashTimeLeft = DashTime;
@@ -240,35 +247,41 @@ public class PlayerMovement : MonoBehaviour
         DashCooldownLeft -= Time.fixedDeltaTime;
         DashTimeLeft -= Time.fixedDeltaTime;
 
-        if (IsGrounded)
+        if (IsGrounded && !IsDashing)
             DashesLeft = Dashes;
 
         if (IsDashing)
-            MoveVelocity = DashDirection.ToFactor() * DashSpeed;
+        {
+            HorizontalVelocity = DashDirection.x * DashSpeed.x;
+            VerticalVelocity = DashDirection.y * DashSpeed.y;
+        }
+
+        if (!IsDashing && DashTimeLeft + Time.fixedDeltaTime > 0.0f)
+            VerticalVelocity = 0.0f;
     }
 
     //////////////////////////////////////////////////////////////////////////
 
-    [Space]
+    //[Space]
 
-    public float GroundSlamSpeed;
-    bool IsGroundSlamming;
+    // public float GroundSlamSpeed;
+    // bool IsGroundSlamming;
 
-    void GroundSlam()
-    {
-        IsGroundSlamming = true;
-    }
+    // void GroundSlam()
+    //{
+    //    IsGroundSlamming = true;
+    //}
 
-    void UpdateGroundSlam()
-    {
-        if (!IsGroundSlamming)
-            return;
+    // void UpdateGroundSlam()
+    //{
+    //    if (!IsGroundSlamming)
+    //        return;
 
-        if (IsGrounded)
-            IsGroundSlamming = false;
-        else
-            VerticalVelocity = -GroundSlamSpeed;
-    }
+    //    if (IsGrounded)
+    //        IsGroundSlamming = false;
+    //    else
+    //        VerticalVelocity = -GroundSlamSpeed;
+    //}
 
     //////////////////////////////////////////////////////////////////////////
 
@@ -282,7 +295,7 @@ public class PlayerMovement : MonoBehaviour
         TerrainContactFilter = new ContactFilter2D();
         TerrainContactFilter.SetLayerMask(LayerMask.GetMask("Terrain"));
 
-        BaseScale = transform.localScale;
+        // BaseScale = transform.localScale;
 
         RigidBody = GetComponent<Rigidbody2D>();
         Assert.IsNotNull(RigidBody);
@@ -293,12 +306,12 @@ public class PlayerMovement : MonoBehaviour
         UpdateIsGrounded();
 
         UpdateMove();
-        UpdateCrouch();
-        UpdateGroundSlam();
+        // UpdateCrouch();
+        // UpdateGroundSlam();
         UpdateFalling();
-        UpdateJump();
+        // UpdateJump();
         UpdateDash();
 
-        RigidBody.velocity = new Vector2(MoveVelocity, VerticalVelocity);
+        RigidBody.velocity = new Vector2(HorizontalVelocity, VerticalVelocity);
     }
 }
