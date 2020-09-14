@@ -272,6 +272,44 @@ public class PlayerMovement : MonoBehaviour
 
     //////////////////////////////////////////////////////////////////////////
 
+    [Space]
+
+    public float AnchorReelSpeed;
+    public float AnchorReelBreakoffDistance;
+    AnchorPoint ActiveAnchorPoint;
+    bool IsReelingIn => ActiveAnchorPoint;
+
+    AnchorRadius AnchorRadiusScript;
+
+    void OnAnchor()
+    {
+        var pointsInRange = AnchorRadiusScript.AnchorPointsInRange;
+        if (pointsInRange.Count > 0)
+            ActiveAnchorPoint = pointsInRange[0];
+    }
+
+    void UpdateAnchor()
+    {
+        if (!ActiveAnchorPoint)
+            return;
+
+        var toPoint = ActiveAnchorPoint.transform.position.AsVector2() - RigidBody.position;
+        if (toPoint.magnitude < AnchorReelBreakoffDistance)
+        {
+            ActiveAnchorPoint = null;
+        }
+        else
+        {
+            var velocity = toPoint.normalized * AnchorReelSpeed;
+            MoveVelocity = velocity.x;
+            VerticalVelocity = velocity.y;
+
+            Debug.DrawLine(RigidBody.position, ActiveAnchorPoint.transform.position);
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+
     Rigidbody2D RigidBody;
 
     void Awake()
@@ -283,6 +321,9 @@ public class PlayerMovement : MonoBehaviour
         TerrainContactFilter.SetLayerMask(LayerMask.GetMask("Terrain"));
 
         BaseScale = transform.localScale;
+
+        AnchorRadiusScript = GetComponentInChildren<AnchorRadius>();
+        Assert.IsNotNull(AnchorRadiusScript);
 
         RigidBody = GetComponent<Rigidbody2D>();
         Assert.IsNotNull(RigidBody);
@@ -298,6 +339,7 @@ public class PlayerMovement : MonoBehaviour
         UpdateFalling();
         UpdateJump();
         UpdateDash();
+        UpdateAnchor();
 
         RigidBody.velocity = new Vector2(MoveVelocity, VerticalVelocity);
     }
