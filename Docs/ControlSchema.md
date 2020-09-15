@@ -73,3 +73,9 @@ The following rules are established:
 - A player can swap the mapping of both sticks.
 
 - A player can swap the mapping of both triggers.
+
+### Stick Deadzones
+
+![Deadzones](Images/Deadzone.png)
+
+These and other shapes can be combined to create more complex deadzones.
