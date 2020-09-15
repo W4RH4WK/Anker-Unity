@@ -47,7 +47,7 @@ The following rules are established:
 
 - If the game features digital player movement, movement can be controlled with `LS` as well as `D-pad`.
 
-- Actuating `RS` conflicts with actuating the face buttons.
+- Actuating `RS` conflicts with actuating any of the face buttons.
 
 - Only the following button combinations are valid, other combinations are treated as conflicts:
     - `A` + `X`
@@ -57,7 +57,7 @@ The following rules are established:
     - `LT` + `RT`
     - Trigger + face button
 
-- Stick input is generally deemed imprecise and needs additional processing like deadzone or angle snapping.
+- Stick input is generally deemed imprecise and needs additional processing like deadzoning or angle snapping.
   Furthermore, visual feedback is required for aiming tasks.
 
 - Flicking a stick triggers the action on the frame the outer radial deadzone is entered.
