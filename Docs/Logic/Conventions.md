@@ -41,7 +41,7 @@ This also includes Unity messages (e.g. `Start`, `Update`).
 ```csharp
 public class CooldownTimer : MonoBehaviour
 {
-    public float DefaultPeriod = 1;
+    public float DefaultPeriod;
 
     public void Set(float period) { /* ... */ }
 
