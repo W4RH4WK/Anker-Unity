@@ -692,6 +692,7 @@ GameObject:
   - component: {fileID: 1182291592}
   - component: {fileID: 1182291593}
   - component: {fileID: 1182291595}
+  - component: {fileID: 1182291588}
   m_Layer: 0
   m_Name: Player Steve
   m_TagString: Untagged
@@ -699,6 +700,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1182291588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182291587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ce2b9fc1e31fdd4fa5e5ad3addeb944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Offset: {x: 0, y: 2, z: -10}
+  Speed: 1
 --- !u!4 &1182291590
 Transform:
   m_ObjectHideFlags: 0
