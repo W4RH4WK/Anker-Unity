@@ -12,11 +12,11 @@ An Xbox One Controller is used as reference.
 ![Xbox One Controller](Images/XboxOneController.png)
 
 - 1 directional pad (`D-pad`)
-- 2 analog sticks (`LS` / `RS`) (clickable)
+- 2 analog sticks (`LS`, `RS`) (clickable)
 - 4 face buttons (`A`, `B`, `X`, `Y`)
-- 2 shoulder buttons (`LB` / `RB`)
+- 2 shoulder buttons (`LB`, `RB`)
 - 2 analog triggers (`LT`, `RT`)
-- 2 system buttons (`View` / `Menu`)
+- 2 system buttons (`View`, `Menu`)
 
 The Xbox button is usually controlled by the platform and therefore not usable.
 Vibration support is nonessential.
