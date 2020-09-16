@@ -281,8 +281,22 @@ public class PlayerMovement : MonoBehaviour
 
     AnchorRadius AnchorRadiusScript;
 
-    void OnAnchor() => ActiveAnchorPoint = AnchorRadiusScript.GetAnchorPoint(MoveInput, LookDirection);
-    void OnAttackAnchor() => ActiveAnchorPoint = AnchorRadiusScript.GetEnemy(MoveInput, LookDirection);
+    bool AnchorInputTriggered;
+
+    void OnAnchor(InputValue value)
+    {
+        var input = value.Get<Vector2>();
+
+        if (input.magnitude == 1.0f && !AnchorInputTriggered)
+        {
+            AnchorInputTriggered = true;
+            ActiveAnchorPoint = AnchorRadiusScript.GetAnchorPoint(input, LookDirection);
+        }
+        else if (input.magnitude < 0.5f)
+        {
+            AnchorInputTriggered = false;
+        }
+    }
 
     void UpdateAnchor()
     {

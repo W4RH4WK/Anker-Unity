@@ -31,17 +31,9 @@
                 },
                 {
                     "name": "Anchor",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "d669ad17-110a-498c-bec3-89b46112dea2",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "AttackAnchor",
-                    "type": "Button",
-                    "id": "24840bf6-91e0-47f6-bbed-498e7c0c164e",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Stick",
                     "processors": "",
                     "interactions": ""
                 }
@@ -50,8 +42,8 @@
                 {
                     "name": "",
                     "id": "c0f5add8-e8ca-4df0-b28d-0f6afc3646bf",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Jump",
@@ -72,7 +64,7 @@
                 {
                     "name": "",
                     "id": "cdd20bd0-42c9-47ca-8026-3b81f6a23543",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -93,28 +85,6 @@
                 },
                 {
                     "name": "",
-                    "id": "c7f5e76d-d4e5-419c-8a27-4f80261910d1",
-                    "path": "<Gamepad>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Anchor",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8f00242c-5520-4415-a8b7-066355518f5e",
-                    "path": "<Keyboard>/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Anchor",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "7e986a91-5e19-45cb-9075-336ba7143bfc",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
@@ -126,12 +96,12 @@
                 },
                 {
                     "name": "",
-                    "id": "ecde4d02-7757-43cd-b2bb-e8141445a8bb",
-                    "path": "<Gamepad>/rightTrigger",
-                    "interactions": "Press",
-                    "processors": "",
+                    "id": "dae7964e-7e81-45eb-861c-c07286597999",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "StickDeadzone",
                     "groups": "",
-                    "action": "AttackAnchor",
+                    "action": "Anchor",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
