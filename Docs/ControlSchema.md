@@ -35,17 +35,17 @@ The following rules are established:
 
 - Triggers may be used as buttons.
 
-- `D-pad` can be used as 8 directional input or 4 independent buttons.
+- `D-pad` may be used either as 8 directional input or 4 independent buttons.
 
-- Buttons typically trigger an action the frame they get pressed (not the frame they are released).
+- Buttons should trigger an action the frame they get pressed (not the frame they are released).
 
-- Holding a button can be used to trigger an *associated* action.
+- Holding a button may be used to trigger an *associated* action.
   We refer to this as *overloading* a button.
 
 - System buttons are used only for *modal menus* like the pause menu, inventory, map…
   Pressing the corresponding system button again closes the modal menu.
 
-- If the game features digital player movement, movement can be controlled with `LS` as well as `D-pad`.
+- If the game features digital player movement, movement should be controlled with `LS` as well as `D-pad`.
 
 - Actuating `RS` conflicts with actuating any of the face buttons.
 
@@ -57,7 +57,7 @@ The following rules are established:
     - `LT` + `RT`
     - Trigger + face button
 
-- Stick input is generally deemed imprecise and needs additional processing like deadzoning or angle snapping.
+- Stick input is deemed imprecise and needs additional processing like deadzoning or angle snapping.
   Furthermore, visual feedback is required for aiming tasks.
 
 - Flicking a stick triggers the action on the frame the outer radial deadzone is entered.
