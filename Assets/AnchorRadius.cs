@@ -29,9 +29,9 @@ public class AnchorRadius : MonoBehaviour
         if (!anchorPoint)
             return;
 
-        //if (IsEnemy(anchorPoint))
-        //    EnemiesInRange.Add(anchorPoint);
-        //else
+        if (IsEnemy(anchorPoint))
+            EnemiesInRange.Add(anchorPoint);
+        else
             AnchorPointsInRange.Add(anchorPoint);
     }
 
@@ -41,9 +41,9 @@ public class AnchorRadius : MonoBehaviour
         if (!anchorPoint)
             return;
 
-        //if (IsEnemy(anchorPoint))
-        //    EnemiesInRange.Remove(anchorPoint);
-        //else
+        if (IsEnemy(anchorPoint))
+            EnemiesInRange.Remove(anchorPoint);
+        else
             AnchorPointsInRange.Remove(anchorPoint);
     }
 
