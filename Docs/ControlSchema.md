@@ -65,6 +65,8 @@ The following rules are established:
   Note that most sticks tend to overshoot when they are returned to the home position by the builtin spring mechanism.
   Deadzones need to be adjusted accordingly.
 
+- Stick flicking must not be used to trigger actions that require precise timing.
+
 - Clicking the sticks is not used in the default control scheme.
   A player can manually bind them to an action of a button at their own discretion.
 
