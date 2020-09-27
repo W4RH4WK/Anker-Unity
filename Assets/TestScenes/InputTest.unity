@@ -414,7 +414,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &552340409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1134,15 +1134,16 @@ MonoBehaviour:
   CrouchSlideCooldown: 0.5
   Gravity: 80
   MaxFallSpeed: 40
-  Jumps: 2
+  Jumps: 1
   JumpStrength: 10
   JumpBoostStrength: 50
   JumpBoostTime: 0.12
   CoyoteTime: 0.15
   Dashes: 2
   DashSpeed: 50
-  DashTime: 0.05
+  DashTime: 0.07
   DashCooldown: 0.2
+  DashHoldTime: 0.05
   GroundSlamSpeed: 80
   AnchorReelSpeed: 30
   AnchorReelBreakoffDistance: 0.5
@@ -1381,7 +1382,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1254810443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2051,7 +2052,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1790976939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2172,7 +2173,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1823916509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2401,7 +2402,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1970545520
 MonoBehaviour:
   m_ObjectHideFlags: 0

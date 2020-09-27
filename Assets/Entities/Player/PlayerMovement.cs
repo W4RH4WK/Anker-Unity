@@ -98,7 +98,10 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateIsGrounded()
     {
-        IsGrounded = Physics2D.OverlapCollider(Feet, TerrainContactFilter, new Collider2D[1]) > 0;
+        if (VerticalVelocity > 0.0f)
+            IsGrounded = false;
+        else
+            IsGrounded = Physics2D.OverlapCollider(Feet, TerrainContactFilter, new Collider2D[1]) > 0;
     }
 
     void UpdateFalling()
@@ -203,8 +206,10 @@ public class PlayerMovement : MonoBehaviour
     float DashTimeLeft;
     public float DashCooldown;
     float DashCooldownLeft;
+    public float DashHoldTime;
+    float DashHoldTimeLeft;
 
-    Orientation DashDirection;
+    Vector2 DashDirection;
 
     bool IsDashing => DashTimeLeft > 0.0f;
 
@@ -224,11 +229,11 @@ public class PlayerMovement : MonoBehaviour
         if (DashesLeft <= 0 || DashCooldownLeft > 0.0f || IsCrouching)
             return;
 
-        DashDirection = LookDirection;
+        DashDirection = MoveInput.normalized.SnapAngle8();
 
         // Backdash on ground without move input.
-        if (IsGrounded && Mathf.Abs(MoveInput.x) <= 0.1f)
-            DashDirection = LookDirection.Inverse();
+        // if (IsGrounded && Mathf.Abs(MoveInput.x) <= 0.1f)
+        //    DashDirection = LookDirection.Inverse();
 
         DashesLeft--;
         DashTimeLeft = DashTime;
@@ -239,12 +244,29 @@ public class PlayerMovement : MonoBehaviour
     {
         DashCooldownLeft -= Time.fixedDeltaTime;
         DashTimeLeft -= Time.fixedDeltaTime;
+        DashHoldTimeLeft -= Time.fixedDeltaTime;
 
         if (IsGrounded)
             DashesLeft = Dashes;
 
         if (IsDashing)
-            MoveVelocity = DashDirection.ToFactor() * DashSpeed;
+        {
+            var dashVelocity = DashSpeed * DashDirection;
+            VerticalVelocity = 2.0f * dashVelocity.y;
+            MoveVelocity = dashVelocity.x;
+        }
+
+        if (DashTimeLeft <= 0.0f && DashTimeLeft + Time.fixedDeltaTime > 0.0f)
+        {
+            DashHoldTimeLeft = DashHoldTime;
+            // MoveVelocity = 0.0f;
+        }
+
+        if (DashHoldTimeLeft > 0.0f)
+        {
+            VerticalVelocity = 0.0f;
+            MoveVelocity = 0.0f;
+        }
     }
 
     //////////////////////////////////////////////////////////////////////////
