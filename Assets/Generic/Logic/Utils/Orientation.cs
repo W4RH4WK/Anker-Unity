@@ -1,13 +1,13 @@
 /// <summary>
 /// Orientation states the direction a sprite is facing.
 /// </summary>
-enum Orientation
+public enum Orientation
 {
     Left,
     Right,
 }
 
-static class OrientationExtensions
+public static class OrientationExtensions
 {
     public static Orientation Inverse(this Orientation orientation)
     {
