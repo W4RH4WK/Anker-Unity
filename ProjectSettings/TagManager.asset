@@ -14,11 +14,11 @@ TagManager:
   - 
   - 
   - Terrain
-  - Anchor
+  - Platform
   - Front
-  - 
-  - 
-  - 
+  - Player
+  - PlayerProjectile
+  - Anchor
   - 
   - 
   - 

@@ -66,8 +66,6 @@ public class PlayerMovement : MonoBehaviour
 
     [Space]
 
-    // public Vector3 CrouchColliderRect;
-    // Vector3 BaseColliderRect;
     public float CrouchSlideSpeed;
     public float CrouchSlideTime;
     float CrouchSlideTimeLeft;
@@ -134,6 +132,10 @@ public class PlayerMovement : MonoBehaviour
         {
             IsGrounded = false;
         }
+        else if (PlatformTracker.HasContact)
+        {
+            IsGrounded = true;
+        }
         else
         {
             var feet = GetFeet();
@@ -179,9 +181,16 @@ public class PlayerMovement : MonoBehaviour
         if (value.isPressed)
         {
             if (IsCrouching)
-                CrouchSlide();
+            {
+                if (PlatformTracker.HasContact)
+                    PlatformTracker.DropThrough();
+                else
+                    CrouchSlide();
+            }
             else
+            {
                 Jump();
+            }
         }
     }
 
@@ -352,6 +361,8 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody2D RigidBody;
 
+    PlatformTracker PlatformTracker;
+
     void Awake()
     {
         Assert.IsNotNull(NormalCollider);
@@ -365,6 +376,9 @@ public class PlayerMovement : MonoBehaviour
 
         AnchorPointSelector = GetComponentInChildren<AnchorPointSelector>();
         Assert.IsNotNull(AnchorPointSelector);
+
+        PlatformTracker = GetComponentInChildren<PlatformTracker>();
+        Assert.IsNotNull(PlatformTracker);
     }
 
     void FixedUpdate()
