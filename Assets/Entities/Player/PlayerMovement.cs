@@ -97,7 +97,10 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateIsGrounded()
     {
-        IsGrounded = Physics2D.OverlapCollider(Feet, TerrainContactFilter, new Collider2D[1]) > 0;
+        if (VerticalVelocity > 0.0f)
+            IsGrounded = false;
+        else
+            IsGrounded = Physics2D.OverlapCollider(Feet, TerrainContactFilter, new Collider2D[1]) > 0;
     }
 
     void UpdateFalling()
