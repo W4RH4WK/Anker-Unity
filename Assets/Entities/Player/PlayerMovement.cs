@@ -2,10 +2,32 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
+[SelectionBase]
 public class PlayerMovement : MonoBehaviour
 {
-    public Collider2D Head;
-    public Collider2D Feet;
+    public BoxCollider2D NormalCollider;
+    public BoxCollider2D CrouchCollider;
+    BoxCollider2D ActiveCollider => IsCrouching ? CrouchCollider : NormalCollider;
+
+    public GameObject Body;
+
+    Rect GetFeet()
+    {
+        var feet = new Rect();
+        feet.position = ActiveCollider.transform.position.AsVector2() + ActiveCollider.offset +
+                        Vector2.down * ActiveCollider.size.y / 2.0f;
+        feet.size = new Vector2(ActiveCollider.size.x, 0.01f);
+        return feet;
+    }
+
+    Rect GetHead()
+    {
+        var head = new Rect();
+        head.position = ActiveCollider.transform.position.AsVector2() + ActiveCollider.offset +
+                        Vector2.up * ActiveCollider.size.y / 2.0f;
+        head.size = new Vector2(ActiveCollider.size.x, 0.01f);
+        return head;
+    }
 
     Orientation LookDirection = Orientation.Right;
 
@@ -44,8 +66,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Space]
 
-    public Vector3 CrouchScale;
-    Vector3 BaseScale;
+    // public Vector3 CrouchColliderRect;
+    // Vector3 BaseColliderRect;
     public float CrouchSlideSpeed;
     public float CrouchSlideTime;
     float CrouchSlideTimeLeft;
@@ -71,10 +93,21 @@ public class PlayerMovement : MonoBehaviour
         CrouchSlideCooldownLeft -= Time.fixedDeltaTime;
         CrouchSlideTimeLeft -= Time.fixedDeltaTime;
 
+        NormalCollider.enabled = !IsCrouching;
+        CrouchCollider.enabled = IsCrouching;
+
+        // TODO: Current body is only a placeholder until we have dedicated
+        // sprites.
         if (IsCrouching)
-            transform.localScale = CrouchScale;
+        {
+            Body.transform.localPosition = new Vector3(0.0f, 0.25f);
+            Body.transform.localScale = new Vector3(1.2f, 0.5f, 1.0f);
+        }
         else
-            transform.localScale = BaseScale;
+        {
+            Body.transform.localPosition = new Vector3(0.0f, 0.75f);
+            Body.transform.localScale = new Vector3(1.0f, 1.5f, 1.0f);
+        }
 
         // Stop crouch slide when sliding over edge.
         if (IsFalling)
@@ -98,9 +131,15 @@ public class PlayerMovement : MonoBehaviour
     void UpdateIsGrounded()
     {
         if (VerticalVelocity > 0.0f)
+        {
             IsGrounded = false;
+        }
         else
-            IsGrounded = Physics2D.OverlapCollider(Feet, TerrainContactFilter, new Collider2D[1]) > 0;
+        {
+            var feet = GetFeet();
+            IsGrounded = Physics2D.BoxCast(feet.position, feet.size, 0.0f, Vector2.down, TerrainContactFilter,
+                                           new RaycastHit2D[1], feet.size.y) > 0;
+        }
     }
 
     void UpdateFalling()
@@ -189,8 +228,13 @@ public class PlayerMovement : MonoBehaviour
                 VerticalVelocity -= Gravity * Time.fixedDeltaTime;
 
             // Prevent sticking to ceiling.
-            if (Physics2D.OverlapCollider(Head, TerrainContactFilter, new Collider2D[1]) > 0)
-                VerticalVelocity = 0;
+            {
+                var head = GetHead();
+                var hitCount = Physics2D.BoxCast(head.position, head.size, 0.0f, Vector2.up, TerrainContactFilter,
+                                                 new RaycastHit2D[1], head.size.y);
+                if (hitCount > 0)
+                    VerticalVelocity = 0;
+            }
         }
     }
 
@@ -310,19 +354,17 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake()
     {
-        Assert.IsNotNull(Head);
-        Assert.IsNotNull(Feet);
+        Assert.IsNotNull(NormalCollider);
+        Assert.IsNotNull(CrouchCollider);
 
         TerrainContactFilter = new ContactFilter2D();
         TerrainContactFilter.SetLayerMask(LayerMask.GetMask("Terrain"));
 
-        BaseScale = transform.localScale;
+        RigidBody = GetComponent<Rigidbody2D>();
+        Assert.IsNotNull(RigidBody);
 
         AnchorPointSelector = GetComponentInChildren<AnchorPointSelector>();
         Assert.IsNotNull(AnchorPointSelector);
-
-        RigidBody = GetComponent<Rigidbody2D>();
-        Assert.IsNotNull(RigidBody);
     }
 
     void FixedUpdate()
