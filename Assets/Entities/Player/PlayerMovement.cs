@@ -14,8 +14,7 @@ public class PlayerMovement : MonoBehaviour
     Rect GetFeet()
     {
         var feet = new Rect();
-        feet.position = ActiveCollider.transform.position.AsVector2() + ActiveCollider.offset +
-                        Vector2.down * ActiveCollider.size.y / 2.0f;
+        feet.position = ActiveCollider.bounds.center.AsVector2() + Vector2.down * ActiveCollider.size.y / 2.0f;
         feet.size = new Vector2(ActiveCollider.size.x, 0.01f);
         return feet;
     }
@@ -23,8 +22,7 @@ public class PlayerMovement : MonoBehaviour
     Rect GetHead()
     {
         var head = new Rect();
-        head.position = ActiveCollider.transform.position.AsVector2() + ActiveCollider.offset +
-                        Vector2.up * ActiveCollider.size.y / 2.0f;
+        head.position = ActiveCollider.bounds.center.AsVector2() + Vector2.up * ActiveCollider.size.y / 2.0f;
         head.size = new Vector2(ActiveCollider.size.x, 0.01f);
         return head;
     }
@@ -139,8 +137,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             var feet = GetFeet();
-            IsGrounded = Physics2D.BoxCast(feet.position, feet.size, 0.0f, Vector2.down, TerrainContactFilter,
-                                           new RaycastHit2D[1], feet.size.y) > 0;
+            IsGrounded = Physics2DUtils.BoxCast(feet, Vector2.down, feet.size.y, TerrainContactFilter);
         }
     }
 
@@ -239,9 +236,7 @@ public class PlayerMovement : MonoBehaviour
             // Prevent sticking to ceiling.
             {
                 var head = GetHead();
-                var hitCount = Physics2D.BoxCast(head.position, head.size, 0.0f, Vector2.up, TerrainContactFilter,
-                                                 new RaycastHit2D[1], head.size.y);
-                if (hitCount > 0)
+                if (Physics2DUtils.BoxCast(head, Vector2.up, head.size.y, TerrainContactFilter))
                     VerticalVelocity = 0;
             }
         }
