@@ -1,3 +1,5 @@
+using UnityEngine;
+
 /// <summary>
 /// Orientation states the direction a sprite is facing.
 /// </summary>
@@ -39,5 +41,21 @@ public static class OrientationExtensions
             return -1.0f;
         else
             return 1.0f;
+    }
+
+    public static Vector2 ToVector2(this Orientation orientation)
+    {
+        if (orientation == Orientation.Left)
+            return Vector2.left;
+        else
+            return Vector2.right;
+    }
+
+    public static Vector3 ToVector3(this Orientation orientation)
+    {
+        if (orientation == Orientation.Left)
+            return Vector3.left;
+        else
+            return Vector3.right;
     }
 }
