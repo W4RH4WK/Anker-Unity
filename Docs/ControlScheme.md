@@ -1,4 +1,4 @@
-# Control Schema
+# Control Scheme
 
 This document holds notes and guidelines for the player input design.
 
@@ -21,19 +21,18 @@ An Xbox One Controller is used as reference.
 The Xbox button is usually controlled by the platform and therefore not usable.
 Vibration support is nonessential.
 
-The control schema is organized in multiple *modes of operation*.
+The control scheme is organized in multiple *modes of operation*.
 Examples for such modes are navigating a menu, traversing the terrain, or fighting enemies.
 
-Some combinations (or quick sequences) of inputs result in *conflicts* as they require a high level of dexterity.
-No conflict may occur within the same mode of operation.
-Note that modes of operation commonly blend into each other (like traversing the terrain and fighting enemies).
-Conflicts are only relevant for designing the default mapping.
+Some combinations or quick sequences of inputs require a high level of dexterity and should therefore be avoided to enhance accessability.
+We refer to these as *conflicts*.
+Avoiding conflicts is only relevant for designing the default mapping.
 
 The following rules are established:
 
 - All buttons are digital inputs.
 
-- Triggers may be used as buttons.
+- Triggers may be used as buttons, but not for actions that require precise timing.
 
 - `D-pad` may be used either as 8 directional input or 4 independent buttons.
 
@@ -42,10 +41,13 @@ The following rules are established:
 - Holding a button may be used to trigger an *associated* action.
   We refer to this as *overloading* a button.
 
-- System buttons are used only for *modal menus* like the pause menu, inventory, map…
+- System buttons are used only for *modal menus* like the pause menu, inventory, map, etc.
   Pressing the corresponding system button again closes the modal menu.
+  Actuating system buttons conflicts with actuating `LS`, `RS`, `D-pad`, and any of the face buttons.
 
 - If the game features digital player movement, movement should be controlled with `LS` as well as `D-pad`.
+
+- Actuating `LS` conflicts with actuating `D-pad`.
 
 - Actuating `RS` conflicts with actuating any of the face buttons.
 
@@ -57,6 +59,8 @@ The following rules are established:
     - `LT` + `RT`
     - Trigger + face button
 
+- When combining a trigger with a face button, `RT` is preferred over `LT`.
+
 - Stick input is deemed imprecise and needs additional processing like deadzoning or angle snapping.
   Furthermore, visual feedback is required for aiming tasks.
 
@@ -67,7 +71,7 @@ The following rules are established:
 
 - Stick flicking must not be used to trigger actions that require precise timing.
 
-- Clicking the sticks is not used in the default control scheme.
+- Clicking the sticks is not used in the default mapping.
   A player can manually bind them to an action of a button at their own discretion.
 
 - A player can swap any button mapping.
