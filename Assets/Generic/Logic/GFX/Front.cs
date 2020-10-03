@@ -5,8 +5,6 @@ public class Front : MonoBehaviour
 {
     public float FadeSpeed;
 
-    float TargetOpacity = 1.0f;
-
     int InsideCount;
 
     SpriteRenderer Renderer;
@@ -19,13 +17,10 @@ public class Front : MonoBehaviour
 
     void Update()
     {
-        if (InsideCount > 0)
-            TargetOpacity = 0.0f;
-        else
-            TargetOpacity = 1.0f;
+        var targetOpacity = InsideCount > 0 ? 0.0f : 1.0f;
 
         var color = Renderer.color;
-        color.a = Mathf.MoveTowards(color.a, TargetOpacity, FadeSpeed * Time.deltaTime);
+        color.a = Mathf.MoveTowards(color.a, targetOpacity, FadeSpeed * Time.deltaTime);
         Renderer.color = color;
     }
 
