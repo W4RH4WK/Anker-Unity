@@ -96,4 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05144a47d2070064585c43c39ad47a24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Distance: 10
+  Target: {fileID: 0}
+  Offset: {x: 0, y: 1.5}
+  SmoothTime: 0.18
+  PlayerLookOffset: 1.5

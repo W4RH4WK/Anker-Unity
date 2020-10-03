@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
         return head;
     }
 
-    Orientation LookDirection = Orientation.Right;
+    public Orientation LookDirection { get; private set; } = Orientation.Right;
 
     //////////////////////////////////////////////////////////////////////////
 
