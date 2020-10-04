@@ -70,7 +70,7 @@ public class PlayerMovement : MonoBehaviour
     public float CrouchSlideCooldown;
     float CrouchSlideCooldownLeft;
 
-    bool IsCrouching => IsGrounded && CrouchInput;
+    public bool IsCrouching => IsGrounded && CrouchInput;
     bool IsCrouchSliding => CrouchSlideTimeLeft > 0.0f;
 
     bool CrouchInput => MoveInput.y < -0.5f;
