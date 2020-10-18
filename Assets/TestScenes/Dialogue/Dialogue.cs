@@ -70,16 +70,14 @@ public class Dialogue : MonoBehaviour, ISubmitHandler
     {
         Assert.IsNotNull(MessageBox);
         MessageBoxShowPosition = MessageBox.anchoredPosition;
-        MessageBoxHidePosition =
-            MessageBoxShowPosition + Vector2.down * (MessageBox.rect.height + 2 * MessageBox.anchoredPosition.y);
+        MessageBoxHidePosition = UIUtils.OffscreenPosition(MessageBox);
         MessageBox.anchoredPosition = MessageBoxHidePosition;
 
         Assert.IsNotNull(Message);
 
         Assert.IsNotNull(Portrait);
         PortraitShowPosition = Portrait.rectTransform.anchoredPosition;
-        PortraitHidePosition = PortraitShowPosition + Vector2.right * (Portrait.rectTransform.rect.width +
-                                                                       -2 * Portrait.rectTransform.anchoredPosition.x);
+        PortraitHidePosition = UIUtils.OffscreenPosition(Portrait.rectTransform);
         Portrait.rectTransform.anchoredPosition = PortraitHidePosition;
     }
 }

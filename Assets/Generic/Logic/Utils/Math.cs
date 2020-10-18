@@ -4,6 +4,8 @@ static class Vector2Extensions
 {
     public static Vector3 AsVector3(this Vector2 v) => new Vector3(v.x, v.y);
 
+    public static Vector2 Abs(this Vector2 v) => new Vector2(Mathf.Abs(v.x), Mathf.Abs(v.y));
+
     public static Vector2 Rotate(this Vector2 v, float degrees)
     {
         var sin = Mathf.Sin(degrees * Mathf.Deg2Rad);
@@ -32,4 +34,6 @@ static class Vector2Extensions
 static class Vector3Extensions
 {
     public static Vector2 AsVector2(this Vector3 v) => new Vector2(v.x, v.y);
+
+    public static Vector3 Abs(this Vector3 v) => new Vector3(Mathf.Abs(v.x), Mathf.Abs(v.y), Mathf.Abs(v.z));
 }
