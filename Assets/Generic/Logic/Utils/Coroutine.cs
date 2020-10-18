@@ -2,7 +2,13 @@ using System.Collections;
 
 static class CoroutineUtils
 {
-    public static IEnumerator par(params IEnumerator[] enumerators)
+    public static IEnumerator Seq(params IEnumerator[] enumerators)
+    {
+        foreach (var enumerator in enumerators)
+            yield return enumerator;
+    }
+
+    public static IEnumerator Par(params IEnumerator[] enumerators)
     {
         while (true)
         {
@@ -13,7 +19,7 @@ static class CoroutineUtils
             if (cont)
                 yield return null;
             else
-                break;
+                yield break;
         }
     }
 }

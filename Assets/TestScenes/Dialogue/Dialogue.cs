@@ -17,8 +17,8 @@ public class Dialogue : MonoBehaviour, ISubmitHandler
             yield return null;
     }
 
-    public IEnumerator Show() => CoroutineUtils.par(ShowMessageBox(), ShowPortrait());
-    public IEnumerator Hide() => CoroutineUtils.par(HideMessageBox(), HidePortrait());
+    public IEnumerator Show() => CoroutineUtils.Par(ShowMessageBox(), ShowPortrait());
+    public IEnumerator Hide() => CoroutineUtils.Par(HideMessageBox(), HidePortrait());
 
     //////////////////////////////////////////////////////////////////////////
 
