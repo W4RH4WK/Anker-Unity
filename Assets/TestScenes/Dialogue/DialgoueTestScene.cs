@@ -4,15 +4,14 @@ using UnityEngine.Assertions;
 
 public class DialgoueTestScene : MonoBehaviour
 {
-    Dialogue Dialogue;
+    DialogueSystem Dialogue;
 
     IEnumerator Start()
     {
-        Dialogue = FindObjectOfType<Dialogue>();
+        Dialogue = FindObjectOfType<DialogueSystem>();
         Assert.IsNotNull(Dialogue);
 
-        yield return Dialogue.Show();
-        yield return Dialogue.Say("Hello World");
+        yield return Dialogue.Say("Steve", "Hello World");
         yield return Dialogue.Say("How are you?");
         yield return Dialogue.Say("Fin.");
         yield return Dialogue.Hide();

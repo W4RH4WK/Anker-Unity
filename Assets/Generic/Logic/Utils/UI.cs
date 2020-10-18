@@ -30,3 +30,28 @@ static class RectTransformExtensions
         }
     }
 }
+
+/// <summary>
+/// Helper class to hide a given UI element off-screen.
+/// </summary>
+class OffscreenHider
+{
+    public OffscreenHider(RectTransform element)
+    {
+        Assert.IsNotNull(element);
+
+        Element = element;
+        ShowPosition = Element.anchoredPosition;
+        HidePosition = UIUtils.OffscreenPosition(Element);
+    }
+
+    public void Show() => Element.anchoredPosition = ShowPosition;
+    public void Hide() => Element.anchoredPosition = HidePosition;
+    public IEnumerator Show(float speed) => Element.MoveTowardsAsync(ShowPosition, speed);
+    public IEnumerator Hide(float speed) => Element.MoveTowardsAsync(HidePosition, speed);
+
+    RectTransform Element;
+
+    Vector2 ShowPosition;
+    Vector2 HidePosition;
+}
