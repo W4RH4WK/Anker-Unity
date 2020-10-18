@@ -11,7 +11,7 @@ static class CoroutineUtils
 
     public static IEnumerator Par(params IEnumerator[] enumerators)
     {
-        // Cannot use Any where due to short-circuit evaluation.
+        // Cannot use Any here due to short-circuit evaluation.
         while (enumerators.Count(e => e.MoveNext()) > 0)
             yield return null;
     }
