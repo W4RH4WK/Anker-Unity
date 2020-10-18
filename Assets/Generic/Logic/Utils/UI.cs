@@ -43,6 +43,8 @@ class OffscreenHider
         Element = element;
         ShowPosition = Element.anchoredPosition;
         HidePosition = UIUtils.OffscreenPosition(Element);
+
+        Hide();
     }
 
     public void Show() => Element.anchoredPosition = ShowPosition;

@@ -46,9 +46,6 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
     void Awake()
     {
         Assert.IsNotNull(Box);
-        Box.Hide();
-
         Assert.IsNotNull(Portrait);
-        Portrait.Hide();
     }
 }
