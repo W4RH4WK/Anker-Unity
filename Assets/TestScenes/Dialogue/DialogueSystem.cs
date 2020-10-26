@@ -11,7 +11,7 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
 
         EventSystem.current.SetSelectedGameObject(gameObject);
 
-        yield return Show();
+        yield return Box.ShowAsync();
 
         Continue = false;
         while (!Continue)
@@ -24,8 +24,22 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
         return Say(text);
     }
 
-    public IEnumerator Show() => CoroutineUtils.Par(Box.Show(ShowHideSpeed), Portrait.Show(ShowHideSpeed));
-    public IEnumerator Hide() => CoroutineUtils.Par(Box.Hide(ShowHideSpeed), Portrait.Hide(ShowHideSpeed));
+    public IEnumerator Say(DialogueCharacter character, string text) => this.Par(SetPortraitLeft(character.Image),
+                                                                                 Say(character.name, text));
+
+    public IEnumerator SayRight(DialogueCharacter character, string text) => this.Par(SetPortraitRight(character.Image),
+                                                                                      Say(character.name, text));
+
+    public IEnumerator Tell(string text)
+    {
+        Box.HideName();
+        return Say(text);
+    }
+
+    public IEnumerator SetPortraitLeft(Sprite image) => PortraitLeft.Set(image);
+    public IEnumerator SetPortraitRight(Sprite image) => PortraitRight.Set(image);
+
+    public IEnumerator Hide() => this.Par(Box.HideAsync(), PortraitLeft.HideAsync(), PortraitRight.HideAsync());
 
     //////////////////////////////////////////////////////////////////////////
 
@@ -38,14 +52,15 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
     DialogueBox Box;
 
     [SerializeField]
-    DialoguePortrait Portrait;
+    DialoguePortrait PortraitLeft;
 
     [SerializeField]
-    float ShowHideSpeed;
+    DialoguePortrait PortraitRight;
 
     void Awake()
     {
         Assert.IsNotNull(Box);
-        Assert.IsNotNull(Portrait);
+        Assert.IsNotNull(PortraitLeft);
+        Assert.IsNotNull(PortraitRight);
     }
 }

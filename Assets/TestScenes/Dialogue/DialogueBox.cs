@@ -5,9 +5,16 @@ using UnityEngine.UI;
 
 public class DialogueBox : MonoBehaviour
 {
-    public void SetName(string name) => Name.text = name;
+    public void SetName(string name)
+    {
+        NameBox.SetActive(true);
+        Name.text = name;
+    }
+
+    public void HideName() => NameBox.SetActive(false);
 
     [SerializeField]
+    GameObject NameBox;
     Text Name;
 
     public void SetMessage(string message) => Message.text = message;
@@ -17,15 +24,19 @@ public class DialogueBox : MonoBehaviour
 
     public void Show() => Hider.Show();
     public void Hide() => Hider.Hide();
-    public IEnumerator Show(float speed) => Hider.Show(speed);
-    public IEnumerator Hide(float speed) => Hider.Hide(speed);
-    OffscreenHider Hider;
+    public IEnumerator ShowAsync() => Hider.ShowAsync();
+    public IEnumerator HideAsync() => Hider.HideAsync();
+    CanvasGroupHider Hider;
 
     void Awake()
     {
+        Assert.IsNotNull(NameBox);
+        Name = GetComponentInChildren<Text>(NameBox);
         Assert.IsNotNull(Name);
+
         Assert.IsNotNull(Message);
 
-        Hider = new OffscreenHider(GetComponent<RectTransform>());
+        Hider = GetComponent<CanvasGroupHider>();
+        Assert.IsNotNull(Hider);
     }
 }

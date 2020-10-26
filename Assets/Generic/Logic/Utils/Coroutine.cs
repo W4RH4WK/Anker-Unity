@@ -1,18 +1,19 @@
 using System.Collections;
-using System.Linq;
+using System.Collections.Generic;
+using UnityEngine;
 
-static class CoroutineUtils
+// Unity's coroutine API is provided through MonoBehaviour. We therefore add the
+// following helper functions as extensions method to MonoBehaviour.
+static class MonoBehaviourExtensions
 {
-    public static IEnumerator Seq(params IEnumerator[] enumerators)
+    public static IEnumerator Par(this MonoBehaviour monoBehaviour, params IEnumerator[] coroutines)
     {
-        foreach (var enumerator in enumerators)
-            yield return enumerator;
-    }
+        var startedCoroutines = new List<Coroutine>();
 
-    public static IEnumerator Par(params IEnumerator[] enumerators)
-    {
-        // Cannot use Any here due to short-circuit evaluation.
-        while (enumerators.Count(e => e.MoveNext()) > 0)
-            yield return null;
+        foreach (var coroutine in coroutines)
+            startedCoroutines.Add(monoBehaviour.StartCoroutine(coroutine));
+
+        foreach (var coroutine in startedCoroutines)
+            yield return coroutine;
     }
 }

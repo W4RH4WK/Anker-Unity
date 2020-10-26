@@ -5,20 +5,29 @@ using UnityEngine.UI;
 
 public class DialoguePortrait : MonoBehaviour
 {
-    public void Set(Sprite sprite) => Image.sprite = sprite;
-    Image Image;
+    public IEnumerator Set(Sprite sprite)
+    {
+        if (Image.sprite != sprite)
+            yield return HideAsync();
+
+        Image.sprite = sprite;
+        yield return ShowAsync();
+    }
 
     public void Show() => Hider.Show();
     public void Hide() => Hider.Hide();
-    public IEnumerator Show(float speed) => Hider.Show(speed);
-    public IEnumerator Hide(float speed) => Hider.Hide(speed);
-    OffscreenHider Hider;
+    public IEnumerator ShowAsync() => Hider.ShowAsync();
+    public IEnumerator HideAsync() => Hider.HideAsync();
+    CanvasGroupHider Hider;
+
+    Image Image;
 
     void Awake()
     {
         Image = GetComponent<Image>();
         Assert.IsNotNull(Image);
 
-        Hider = new OffscreenHider(GetComponent<RectTransform>());
+        Hider = GetComponent<CanvasGroupHider>();
+        Assert.IsNotNull(Hider);
     }
 }
