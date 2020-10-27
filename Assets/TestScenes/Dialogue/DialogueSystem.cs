@@ -24,20 +24,23 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
         return Say(text);
     }
 
-    public IEnumerator Say(DialogueCharacter character, string text) => this.Par(SetPortraitLeft(character.Image),
-                                                                                 Say(character.name, text));
+    public IEnumerator Say(DialogueCharacter character,
+                           string text) => this.Par(PortraitLeft.RaiseAsync(), PortraitRight.LowerAsync(),
+                                                    SetPortraitLeft(character.Image), Say(character.name, text));
 
-    public IEnumerator SayRight(DialogueCharacter character, string text) => this.Par(SetPortraitRight(character.Image),
-                                                                                      Say(character.name, text));
+    public IEnumerator SayRight(DialogueCharacter character,
+                                string text) => this.Par(PortraitLeft.LowerAsync(), PortraitRight.RaiseAsync(),
+                                                         SetPortraitRight(character.Image), Say(character.name, text));
 
     public IEnumerator Tell(string text)
     {
         Box.HideName();
-        return Say(text);
+        yield return this.Par(PortraitLeft.LowerAsync(), PortraitRight.LowerAsync());
+        yield return Say(text);
     }
 
-    public IEnumerator SetPortraitLeft(Sprite image) => PortraitLeft.Set(image);
-    public IEnumerator SetPortraitRight(Sprite image) => PortraitRight.Set(image);
+    IEnumerator SetPortraitLeft(Sprite image) => PortraitLeft.Set(image);
+    IEnumerator SetPortraitRight(Sprite image) => PortraitRight.Set(image);
 
     public IEnumerator Hide() => this.Par(Box.HideAsync(), PortraitLeft.HideAsync(), PortraitRight.HideAsync());
 

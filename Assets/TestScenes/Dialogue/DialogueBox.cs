@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
@@ -22,8 +22,6 @@ public class DialogueBox : MonoBehaviour
     [SerializeField]
     Text Message;
 
-    public void Show() => Hider.Show();
-    public void Hide() => Hider.Hide();
     public IEnumerator ShowAsync() => Hider.ShowAsync();
     public IEnumerator HideAsync() => Hider.HideAsync();
     CanvasGroupHider Hider;

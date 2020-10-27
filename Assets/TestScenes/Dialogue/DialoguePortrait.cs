@@ -14,20 +14,39 @@ public class DialoguePortrait : MonoBehaviour
         yield return ShowAsync();
     }
 
-    public void Show() => Hider.Show();
-    public void Hide() => Hider.Hide();
     public IEnumerator ShowAsync() => Hider.ShowAsync();
     public IEnumerator HideAsync() => Hider.HideAsync();
     CanvasGroupHider Hider;
+
+    public IEnumerator RaiseAsync() => RaiseAnimator.On(RaiseDuration);
+    public IEnumerator LowerAsync() => RaiseAnimator.Off(RaiseDuration);
+
+    [SerializeField]
+    float RaiseDuration;
+
+    [SerializeField]
+    Color RaiseTint;
+
+    [SerializeField]
+    Color LowerTint;
+
+    OnOffAnimator RaiseAnimator;
 
     Image Image;
 
     void Awake()
     {
-        Image = GetComponent<Image>();
-        Assert.IsNotNull(Image);
+        RaiseAnimator = new OnOffAnimator();
 
         Hider = GetComponent<CanvasGroupHider>();
         Assert.IsNotNull(Hider);
+
+        Image = GetComponentInChildren<Image>();
+        Assert.IsNotNull(Image);
+    }
+
+    void Update()
+    {
+        Image.color = Color.Lerp(LowerTint, RaiseTint, RaiseAnimator.Percent);
     }
 }
