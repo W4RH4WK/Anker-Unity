@@ -11,7 +11,7 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
 
         EventSystem.current.SetSelectedGameObject(gameObject);
 
-        yield return Box.ShowAsync();
+        yield return this.Par(Box.ShowAsync(), Background.On());
 
         Continue = false;
         while (!Continue)
@@ -42,7 +42,8 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
     IEnumerator SetPortraitLeft(Sprite image) => PortraitLeft.Set(image);
     IEnumerator SetPortraitRight(Sprite image) => PortraitRight.Set(image);
 
-    public IEnumerator Hide() => this.Par(Box.HideAsync(), PortraitLeft.HideAsync(), PortraitRight.HideAsync());
+    public IEnumerator Hide() => this.Par(Box.HideAsync(), PortraitLeft.HideAsync(), PortraitRight.HideAsync(),
+                                          Background.Off());
 
     //////////////////////////////////////////////////////////////////////////
 
@@ -60,10 +61,14 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
     [SerializeField]
     DialoguePortrait PortraitRight;
 
+    [SerializeField]
+    DialogueBackground Background;
+
     void Awake()
     {
         Assert.IsNotNull(Box);
         Assert.IsNotNull(PortraitLeft);
         Assert.IsNotNull(PortraitRight);
+        Assert.IsNotNull(Background);
     }
 }
