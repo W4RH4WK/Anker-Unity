@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 28e503de767ccbb4cb6aaf76f94b0a81
+guid: f7e5c1a9c432f0c449121902c1afe6ad
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,11 +9,12 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Garamond Libre
+  - EB Garamond
   fallbackFontReferences:
-  - {fileID: 12800000, guid: 16b6758db707ea8428bdcb8ae8dd2514, type: 3}
+  - {fileID: 12800000, guid: e2a757b3a97359e43b2629c7d15270bb, type: 3}
+  - {fileID: 12800000, guid: 34e5d80b18ad7744e9fda98bc4a887b8, type: 3}
   customCharacters: 
-  fontRenderingMode: 0
+  fontRenderingMode: 1
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0
   shouldRoundAdvanceValue: 1
