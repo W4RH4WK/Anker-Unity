@@ -29,7 +29,7 @@ public class DialogueBox : MonoBehaviour
     void Awake()
     {
         Assert.IsNotNull(NameBox);
-        Name = GetComponentInChildren<Text>(NameBox);
+        Name = NameBox.GetComponentInChildren<Text>(NameBox);
         Assert.IsNotNull(Name);
 
         Assert.IsNotNull(Message);
