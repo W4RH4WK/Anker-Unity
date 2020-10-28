@@ -10,6 +10,12 @@ public class CanvasGroupHider : MonoBehaviour
     [SerializeField]
     float Duration;
 
+    [SerializeField]
+    bool Position;
+
+    [SerializeField]
+    bool Transparency;
+
     Vector2 ShowPosition;
     Vector2 HidePosition;
 
@@ -34,7 +40,10 @@ public class CanvasGroupHider : MonoBehaviour
 
     void Update()
     {
-        RectTransform.anchoredPosition = Vector2.Lerp(HidePosition, ShowPosition, Animator.Percent);
-        CanvasGroup.alpha = Mathf.Lerp(0.0f, 1.0f, Animator.Percent);
+        if (Position)
+            RectTransform.anchoredPosition = Vector2.Lerp(HidePosition, ShowPosition, Animator.Percent);
+
+        if (Transparency)
+            CanvasGroup.alpha = Mathf.Lerp(0.0f, 1.0f, Animator.Percent);
     }
 }

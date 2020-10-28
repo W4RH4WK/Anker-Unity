@@ -18,11 +18,7 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
             yield return null;
     }
 
-    public IEnumerator Say(string name, string text)
-    {
-        Box.SetName(name);
-        return Say(text);
-    }
+    public IEnumerator Say(string name, string text) => this.Par(Box.SetName(name), Say(text));
 
     public IEnumerator Say(DialogueCharacter character,
                            string text) => this.Par(PortraitLeft.RaiseAsync(), PortraitRight.LowerAsync(),
@@ -30,12 +26,11 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
 
     public IEnumerator SayRight(DialogueCharacter character,
                                 string text) => this.Par(PortraitLeft.LowerAsync(), PortraitRight.RaiseAsync(),
-                                                         SetPortraitRight(character.Image), Say(character.name, text));
+                                                         SetPortraitRight(character.Image), Say(character.Name, text));
 
     public IEnumerator Tell(string text)
     {
-        Box.HideName();
-        yield return this.Par(PortraitLeft.LowerAsync(), PortraitRight.LowerAsync());
+        yield return this.Par(Box.HideName(), PortraitLeft.LowerAsync(), PortraitRight.LowerAsync());
         yield return Say(text);
     }
 
