@@ -32,6 +32,6 @@ public class DialogueBackground : MonoBehaviour
     void Update()
     {
         Image.color = Color.Lerp(Color.white, BlurColor, Animator.Percent);
-        Image.material.SetFloat("_Radius", Mathf.Lerp(0.0f, BlurStrength, Animator.Percent));
+        Image.material.SetFloat("_Strength", Mathf.Lerp(0.0f, BlurStrength, Animator.Percent));
     }
 }

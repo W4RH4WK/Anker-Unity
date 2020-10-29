@@ -4,7 +4,7 @@ Shader "Anker/Blur"
 {
     Properties
     {
-        _Radius("Radius", Range(0, 10)) = 1
+        _Strength("Strength", Range(0, 10)) = 1
     }
     
     CGINCLUDE
@@ -73,7 +73,7 @@ Shader "Anker/Blur"
                 sampler2D _GrabTexture;
                 float4 _GrabTexture_TexelSize;
 
-                float _Radius;
+                float _Strength;
                 
                 half4 frag(v2f i) : COLOR
                 {
@@ -82,7 +82,7 @@ Shader "Anker/Blur"
                     sum += GRABXYPIXEL(0.0, 0.0);
                     int measurments = 1;
                     
-                    for (float range = 0.2f; range <= _Radius; range += 0.2f)
+                    for (float range = 0.2f; range <= _Strength; range += 0.2f)
                     {
                         sum += GRABXYPIXEL(range, range);
                         sum += GRABXYPIXEL(range, -range);
@@ -111,19 +111,19 @@ Shader "Anker/Blur"
                 sampler2D _GrabTexture;
                 float4 _GrabTexture_TexelSize;
                 
-                float _Radius;
+                float _Strength;
                 // float4 _Tint;
                 
                 half4 frag(v2f i) : COLOR
                 {
                     
                     half4 sum = half4(0,0,0,0);
-                    float radius = 1.41421356237 * _Radius;
+                    float Strength = 1.41421356237 * _Strength;
                     
                     sum += GRABXYPIXEL(0.0, 0.0);
                     int measurments = 1;
                     
-                    for (float range = 1.41421356237f; range <= radius * 1.41; range += 1.41421356237f)
+                    for (float range = 1.41421356237f; range <= Strength * 1.41; range += 1.41421356237f)
                     {
                         sum += GRABXYPIXEL(range, 0);
                         sum += GRABXYPIXEL(-range, 0);
