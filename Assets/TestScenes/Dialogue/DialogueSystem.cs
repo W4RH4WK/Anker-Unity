@@ -7,11 +7,11 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
 {
     public IEnumerator Say(string text)
     {
-        Box.SetMessage(text);
+        yield return this.Par(Box.ShowAsync(), Background.On());
 
         EventSystem.current.SetSelectedGameObject(gameObject);
 
-        yield return this.Par(Box.ShowAsync(), Background.On());
+        yield return Box.SetMessage(text);
 
         Continue = false;
         while (!Continue)

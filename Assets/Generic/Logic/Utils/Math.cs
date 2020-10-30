@@ -37,3 +37,11 @@ static class Vector3Extensions
 
     public static Vector3 Abs(this Vector3 v) => new Vector3(Mathf.Abs(v.x), Mathf.Abs(v.y), Mathf.Abs(v.z));
 }
+
+static class MathUtils
+{
+    /// <summary>
+    /// Remaps sinus such that Sin01(0) = 0 and Sin(1) = 1.
+    /// </summary>
+    public static float Sin01(float f) => 0.5f * Mathf.Sin((f - 0.5f) * Mathf.PI) + 0.5f;
+}
