@@ -14,6 +14,8 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
         Continue = false;
         while (!Continue)
             yield return null;
+
+        AudioSource.PlayOneShot(ClickSound, 0.6f);
     }
 
     public IEnumerator Say(string name, string text) => this.Par(Box.SetName(name), Say(text));
@@ -54,11 +56,20 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
     [SerializeField]
     DialogueBackground Background;
 
+    [SerializeField]
+    AudioClip ClickSound;
+
+    AudioSource AudioSource;
+
     void Awake()
     {
         Assert.IsNotNull(Box);
         Assert.IsNotNull(PortraitLeft);
         Assert.IsNotNull(PortraitRight);
         Assert.IsNotNull(Background);
+        Assert.IsNotNull(ClickSound);
+
+        AudioSource = GetComponent<AudioSource>();
+        Assert.IsNotNull(AudioSource);
     }
 }
