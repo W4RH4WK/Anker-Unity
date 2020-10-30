@@ -680,7 +680,7 @@ MonoBehaviour:
   PortraitLeft: {fileID: 1883680405}
   PortraitRight: {fileID: 940488307}
   Background: {fileID: 1081214949}
-  ClickSound: {fileID: 8300000, guid: df349f9cde0bf5e4c81f660a78eb7716, type: 3}
+  ClickSound: {fileID: 8300000, guid: d3352b930b79d63488f5080dd85d91cd, type: 3}
 --- !u!82 &1111276361
 AudioSource:
   m_ObjectHideFlags: 0
