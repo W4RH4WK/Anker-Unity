@@ -7,11 +7,9 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
 {
     public IEnumerator Say(string text)
     {
-        yield return this.Par(Box.ShowAsync(), Background.On());
-
         EventSystem.current.SetSelectedGameObject(gameObject);
 
-        yield return Box.SetMessage(text);
+        yield return this.Par(Box.ShowAsync(), Box.SetMessage(text), Background.On());
 
         Continue = false;
         while (!Continue)
@@ -28,11 +26,8 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
                                 string text) => this.Par(PortraitLeft.LowerAsync(), PortraitRight.RaiseAsync(),
                                                          SetPortraitRight(character.Image), Say(character.Name, text));
 
-    public IEnumerator Tell(string text)
-    {
-        yield return this.Par(Box.HideName(), PortraitLeft.LowerAsync(), PortraitRight.LowerAsync());
-        yield return Say(text);
-    }
+    public IEnumerator Tell(string text) => this.Par(Box.HideName(), Say(text), PortraitLeft.LowerAsync(),
+                                                     PortraitRight.LowerAsync());
 
     IEnumerator SetPortraitLeft(Sprite image) => PortraitLeft.Set(image);
     IEnumerator SetPortraitRight(Sprite image) => PortraitRight.Set(image);
