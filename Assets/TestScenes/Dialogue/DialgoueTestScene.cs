@@ -20,6 +20,8 @@ public class DialgoueTestScene : MonoBehaviour
         Assert.IsNotNull(Steve);
         Assert.IsNotNull(Tim);
 
+        yield return new WaitForSeconds(1.0f);
+
         yield return Dialogue.Tell("Our fearless protagonist approaches his fellow mate.");
 
         yield return Dialogue.Say(Tim, $"Ahoi {Steve.Name}!");
