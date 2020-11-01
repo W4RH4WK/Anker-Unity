@@ -28,7 +28,7 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
                                 string text) => this.Par(PortraitLeft.LowerAsync(), PortraitRight.RaiseAsync(),
                                                          SetPortraitRight(character.Image), Say(character.Name, text));
 
-    public IEnumerator Tell(string text) => this.Par(Box.HideName(), Say(text), PortraitLeft.LowerAsync(),
+    public IEnumerator Tell(string text) => this.Par(Box.HideName(), Say($"— {text}"), PortraitLeft.LowerAsync(),
                                                      PortraitRight.LowerAsync());
 
     public IEnumerator HidePortraitLeft() => PortraitLeft.HideAsync();
