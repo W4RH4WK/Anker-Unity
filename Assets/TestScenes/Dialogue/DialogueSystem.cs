@@ -44,6 +44,14 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
 
     //////////////////////////////////////////////////////////////////////////
 
+    [Header("Settings")]
+
+    public float AnimationDuration;
+
+    public AudioClip ClickSound;
+
+    [Header("Elements")]
+
     [SerializeField]
     DialogueBox Box;
 
@@ -55,9 +63,6 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
 
     [SerializeField]
     DialogueBackground Background;
-
-    [SerializeField]
-    AudioClip ClickSound;
 
     AudioSource AudioSource;
 

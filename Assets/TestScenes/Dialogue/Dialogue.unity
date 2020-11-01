@@ -330,7 +330,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f2ae227dac16d48847e91fda8008eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Duration: 0.1
   Position: 0
   Transparency: 1
 --- !u!225 &479413858
@@ -502,9 +501,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d2096c00f88bc7439fd557d1e95391b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RaiseDuration: 0.2
   RaiseTint: {r: 1, g: 1, b: 1, a: 1}
-  LowerTint: {r: 0.5176471, g: 0.5176471, b: 0.5176471, a: 1}
+  LowerTint: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!114 &940488310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -517,7 +515,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f2ae227dac16d48847e91fda8008eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Duration: 0.2
   Position: 0
   Transparency: 1
 --- !u!225 &940488311
@@ -620,7 +617,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa39ba6fc2f455343ba66ffacaaf7675, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Duration: 0.2
   BlurStrength: 3.2
   BlurColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
 --- !u!1 &1111276358
@@ -676,11 +672,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f42b8c1ac55ed42968b57da56d7feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AnimationDuration: 0.2
+  ClickSound: {fileID: 8300000, guid: a1983120d9acf3540a839a05d0bab228, type: 3}
   Box: {fileID: 1272466037}
   PortraitLeft: {fileID: 1883680405}
   PortraitRight: {fileID: 940488307}
   Background: {fileID: 1081214949}
-  ClickSound: {fileID: 8300000, guid: a1983120d9acf3540a839a05d0bab228, type: 3}
 --- !u!82 &1111276361
 AudioSource:
   m_ObjectHideFlags: 0
@@ -844,7 +841,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NameBox: {fileID: 479413851}
   Message: {fileID: 1741351802}
-  TextRevealDuration: 0.2
 --- !u!114 &1272466038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -857,7 +853,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f2ae227dac16d48847e91fda8008eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Duration: 0.2
   Position: 0
   Transparency: 1
 --- !u!1 &1322244453
@@ -1518,9 +1513,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d2096c00f88bc7439fd557d1e95391b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RaiseDuration: 0.2
   RaiseTint: {r: 1, g: 1, b: 1, a: 1}
-  LowerTint: {r: 0.6431373, g: 0.6431373, b: 0.6431373, a: 1}
+  LowerTint: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!114 &1883680406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1533,7 +1527,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f2ae227dac16d48847e91fda8008eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Duration: 0.2
   Position: 0
   Transparency: 1
 --- !u!225 &1883680407

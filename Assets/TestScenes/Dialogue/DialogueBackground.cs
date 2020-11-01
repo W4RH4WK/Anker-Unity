@@ -5,12 +5,9 @@ using UnityEngine.UI;
 
 public class DialogueBackground : MonoBehaviour
 {
-    public IEnumerator On() => Animator.On(Duration);
-    public IEnumerator Off() => Animator.Off(Duration);
+    public IEnumerator On() => Animator.On(System.AnimationDuration);
+    public IEnumerator Off() => Animator.Off(System.AnimationDuration);
     OnOffAnimator Animator;
-
-    [SerializeField]
-    float Duration;
 
     [SerializeField]
     float BlurStrength;
@@ -18,10 +15,15 @@ public class DialogueBackground : MonoBehaviour
     [SerializeField]
     Color BlurColor;
 
+    DialogueSystem System;
+
     Image Image;
 
     void Awake()
     {
+        System = GetComponentInParent<DialogueSystem>();
+        Assert.IsNotNull(System);
+
         Animator = new OnOffAnimator();
 
         Image = GetComponent<Image>();

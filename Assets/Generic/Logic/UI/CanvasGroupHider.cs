@@ -4,11 +4,8 @@ using UnityEngine.Assertions;
 
 public class CanvasGroupHider : MonoBehaviour
 {
-    public IEnumerator ShowAsync() => Animator.On(Duration);
-    public IEnumerator HideAsync() => Animator.Off(Duration);
-
-    [SerializeField]
-    float Duration;
+    public IEnumerator ShowAsync(float duration) => Animator.On(duration);
+    public IEnumerator HideAsync(float duration) => Animator.Off(duration);
 
     [SerializeField]
     bool Position;
