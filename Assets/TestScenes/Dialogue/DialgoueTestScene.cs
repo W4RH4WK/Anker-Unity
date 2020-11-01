@@ -20,14 +20,16 @@ public class DialgoueTestScene : MonoBehaviour
         Assert.IsNotNull(Steve);
         Assert.IsNotNull(Tim);
 
+        Tim.SetAlias("Tom");
+
         yield return new WaitForSeconds(1.0f);
 
         yield return Dialogue.Tell("Our fearless protagonist approaches his fellow mate.");
 
-        yield return Dialogue.Say(Tim, $"Ahoi {Steve.Name}!");
+        yield return Dialogue.Say(Tim, $"Ahoi {Steve}!");
         yield return Dialogue.Say("'ow you doin', chum?");
 
-        yield return Dialogue.SayRight(Steve, $"Oi {Tim.Name}! Me is fine. How 'bout you?");
+        yield return Dialogue.SayRight(Steve, $"Oi {Tim}! Me is fine. How 'bout you?");
 
         yield return Dialogue.Say(Tim, "O' good, o' good.");
 
