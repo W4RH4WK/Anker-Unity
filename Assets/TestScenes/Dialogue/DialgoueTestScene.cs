@@ -31,6 +31,11 @@ public class DialgoueTestScene : MonoBehaviour
 
         yield return Dialogue.Say(Tim, "O' good, o' good.");
 
+        yield return Dialogue.SayRight(Steve, "Oright, see ya.");
+
+        yield return Dialogue.Tell($"{Steve} carries on along without {Tim}.");
+        yield return Dialogue.HidePortraitLeft();
+
         yield return Dialogue.Tell("Fin.");
         yield return Dialogue.Hide();
 

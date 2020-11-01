@@ -31,6 +31,9 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
     public IEnumerator Tell(string text) => this.Par(Box.HideName(), Say(text), PortraitLeft.LowerAsync(),
                                                      PortraitRight.LowerAsync());
 
+    public IEnumerator HidePortraitLeft() => PortraitLeft.HideAsync();
+    public IEnumerator HidePortraitRight() => PortraitRight.HideAsync();
+
     IEnumerator SetPortraitLeft(Sprite image) => PortraitLeft.Set(image);
     IEnumerator SetPortraitRight(Sprite image) => PortraitRight.Set(image);
 
