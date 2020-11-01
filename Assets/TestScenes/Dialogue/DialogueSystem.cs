@@ -22,7 +22,7 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
 
     public IEnumerator Say(DialogueCharacter character,
                            string text) => this.Par(PortraitLeft.RaiseAsync(), PortraitRight.LowerAsync(),
-                                                    SetPortraitLeft(character.Image), Say(character.name, text));
+                                                    SetPortraitLeft(character.Image), Say(character.Name, text));
 
     public IEnumerator SayRight(DialogueCharacter character,
                                 string text) => this.Par(PortraitLeft.LowerAsync(), PortraitRight.RaiseAsync(),
