@@ -28,4 +28,19 @@ public class CameraFollower : MonoBehaviour
     {
         transform.position = Vector3.SmoothDamp(transform.position, TargetPosition(), ref Velocity, SmoothTime);
     }
+
+#if !UNITY_EDITOR
+    void OnGUI()
+    {
+        GUI.WindowFunction windowFunc = (int windowId) =>
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("SmoothTime");
+            SmoothTime = float.Parse(GUILayout.TextField($"{SmoothTime}"));
+            GUILayout.EndHorizontal();
+        };
+
+        GUILayout.Window(1, new Rect(300, 0, 0, 0), windowFunc, "Camera Tweaks", GUILayout.Width(300));
+    }
+#endif
 }

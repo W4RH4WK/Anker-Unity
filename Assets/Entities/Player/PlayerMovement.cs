@@ -1,3 +1,4 @@
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -390,4 +391,26 @@ public class PlayerMovement : MonoBehaviour
 
         RigidBody.velocity = new Vector2(MoveVelocity, VerticalVelocity);
     }
+
+#if !UNITY_EDITOR
+    void OnGUI()
+    {
+        GUI.WindowFunction windowFunc = (int windowId) =>
+        {
+            foreach (var field in GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public |
+                                                      BindingFlags.Instance))
+            {
+                GUILayout.BeginHorizontal();
+                if (field.FieldType == typeof(float))
+                {
+                    GUILayout.Label(field.Name);
+                    field.SetValue(this, float.Parse(GUILayout.TextField($"{(float)field.GetValue(this)}")));
+                }
+                GUILayout.EndHorizontal();
+            }
+        };
+
+        GUILayout.Window(0, new Rect(), windowFunc, "Player Tweaks", GUILayout.Width(300));
+    }
+#endif
 }
