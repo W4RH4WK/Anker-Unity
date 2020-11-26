@@ -99,4 +99,6 @@ MonoBehaviour:
   Target: {fileID: 0}
   Offset: {x: 0, y: 1.5}
   SmoothTime: 0.18
-  PlayerLookOffset: 1.5
+  Breathing: 0
+  BreathingAmplitude: 0.01
+  BreathingFrequency: 0.2

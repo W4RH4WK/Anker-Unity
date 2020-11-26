@@ -7,6 +7,10 @@ public class CameraFollower : MonoBehaviour
 
     public float SmoothTime;
 
+    public bool Breathing;
+    public float BreathingAmplitude;
+    public float BreathingFrequency;
+
     Vector3 Velocity;
 
     Vector3 TargetPosition()
@@ -26,7 +30,15 @@ public class CameraFollower : MonoBehaviour
 
     void Update()
     {
-        transform.position = Vector3.SmoothDamp(transform.position, TargetPosition(), ref Velocity, SmoothTime);
+        var breathingOffset = Vector3.zero;
+        if (Breathing)
+        {
+            breathingOffset = BreathingAmplitude *
+                              Mathf.Sin(2.0f * Mathf.PI * BreathingFrequency * Time.timeSinceLevelLoad) * Vector3.up;
+        }
+
+        transform.position =
+            Vector3.SmoothDamp(transform.position, TargetPosition() + breathingOffset, ref Velocity, SmoothTime);
     }
 
 #if !UNITY_EDITOR
