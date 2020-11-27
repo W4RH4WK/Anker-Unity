@@ -10,10 +10,7 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
         EventSystem.current.SetSelectedGameObject(gameObject);
 
         yield return this.Par(Box.ShowAsync(), Box.SetMessage(text), Background.On());
-
-        Continue = false;
-        while (!Continue)
-            yield return null;
+        yield return WaitForContinue();
 
         AudioSource.PlayOneShot(ClickSound, 0.6f);
     }
@@ -42,8 +39,15 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
 
     //////////////////////////////////////////////////////////////////////////
 
-    public void OnSubmit(BaseEventData eventData) => Continue = true;
-    bool Continue;
+    public void OnSubmit(BaseEventData eventData) => ContinueLastFrame = Time.frameCount;
+    bool Continue => ContinueLastFrame == Time.frameCount;
+    int ContinueLastFrame;
+
+    public IEnumerator WaitForContinue()
+    {
+        while (!Continue)
+            yield return null;
+    }
 
     //////////////////////////////////////////////////////////////////////////
 
