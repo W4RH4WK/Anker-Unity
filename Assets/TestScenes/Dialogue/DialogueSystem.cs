@@ -26,6 +26,14 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
     public IEnumerator Tell(string text) => this.Par(Box.HideName(), Say($"— {text}"), PortraitLeft.LowerAsync(),
                                                      PortraitRight.LowerAsync());
 
+    public IEnumerator ShowDocument(Document document)
+    {
+        EventSystem.current.SetSelectedGameObject(gameObject);
+
+        yield return this.Par(Doc.ShowAsync(), Doc.SetText(document.Text));
+        yield return Doc.HideAsync();
+    }
+
     public IEnumerator HidePortraitLeft() => PortraitLeft.HideAsync();
     public IEnumerator HidePortraitRight() => PortraitRight.HideAsync();
 
@@ -57,6 +65,7 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
     [Header("Settings")]
 
     public float AnimationDuration;
+    public float DocumentTextRevealDuration;
 
     public AudioClip ClickSound;
 
@@ -74,6 +83,9 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
     [SerializeField]
     DialogueBackground Background;
 
+    [SerializeField]
+    DocumentBox Doc;
+
     AudioSource AudioSource;
 
     void Awake()
@@ -82,6 +94,7 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
         Assert.IsNotNull(PortraitLeft);
         Assert.IsNotNull(PortraitRight);
         Assert.IsNotNull(Background);
+        Assert.IsNotNull(Doc);
         Assert.IsNotNull(ClickSound);
 
         AudioSource = GetComponent<AudioSource>();

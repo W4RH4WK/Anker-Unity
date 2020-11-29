@@ -12,6 +12,9 @@ public class DialgoueTestScene : MonoBehaviour
     [SerializeField]
     DialogueCharacter Tim;
 
+    [SerializeField]
+    Document TestDoc;
+
     IEnumerator Start()
     {
         Dialogue = FindObjectOfType<DialogueSystem>();
@@ -32,6 +35,9 @@ public class DialgoueTestScene : MonoBehaviour
         yield return Dialogue.SayRight(Steve, $"Oi {Tim}! Me is fine. How 'bout you?");
 
         yield return Dialogue.Say(Tim, "O' good, o' good.");
+        yield return Dialogue.Say("Take a look at this!");
+
+        yield return Dialogue.ShowDocument(TestDoc);
 
         yield return Dialogue.SayRight(Steve, "Oright, see ya.");
 
