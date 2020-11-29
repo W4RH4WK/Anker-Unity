@@ -11,8 +11,6 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
 
         yield return this.Par(Box.ShowAsync(), Box.SetMessage(text), Background.On());
         yield return WaitForContinue();
-
-        AudioSource.PlayOneShot(ClickSound, 0.6f);
     }
 
     public IEnumerator Say(string name, string text) => this.Par(Box.SetName(name), Say(text));
@@ -45,8 +43,13 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
 
     public IEnumerator WaitForContinue()
     {
+        // Wait for at least one frame.
+        yield return null;
+
         while (!Continue)
             yield return null;
+
+        AudioSource.PlayOneShot(ClickSound, 0.6f);
     }
 
     //////////////////////////////////////////////////////////////////////////
