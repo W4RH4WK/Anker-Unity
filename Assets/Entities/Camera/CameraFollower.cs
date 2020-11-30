@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class CameraFollower : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class CameraFollower : MonoBehaviour
 
     Vector3 Velocity;
 
+    Rigidbody2D Body;
+
     Vector3 TargetPosition()
     {
         if (!Target)
@@ -23,12 +26,18 @@ public class CameraFollower : MonoBehaviour
         return pos;
     }
 
-    void Start()
+    void Awake()
     {
-        transform.position = TargetPosition();
+        Body = GetComponent<Rigidbody2D>();
+        Assert.IsNotNull(Body);
     }
 
-    void Update()
+    void Start()
+    {
+        Body.position = TargetPosition();
+    }
+
+    void FixedUpdate()
     {
         var breathingOffset = Vector3.zero;
         if (Breathing)
@@ -37,8 +46,8 @@ public class CameraFollower : MonoBehaviour
                               Mathf.Sin(2.0f * Mathf.PI * BreathingFrequency * Time.timeSinceLevelLoad) * Vector3.up;
         }
 
-        transform.position =
-            Vector3.SmoothDamp(transform.position, TargetPosition() + breathingOffset, ref Velocity, SmoothTime);
+        Body.position =
+            Vector3.SmoothDamp(Body.position, TargetPosition() + breathingOffset, ref Velocity, SmoothTime);
     }
 
 #if !UNITY_EDITOR
