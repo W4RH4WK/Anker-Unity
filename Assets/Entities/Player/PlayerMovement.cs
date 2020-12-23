@@ -161,10 +161,9 @@ public class PlayerMovement : MonoBehaviour
 
     public int Jumps;
     int JumpsLeft;
-    public float JumpStrength;
-    public float JumpBoostStrength;
-    public float JumpBoostTime;
-    float JumpBoostTimeLeft;
+    public float JumpVelocity;
+    public float DoubleJumpVelocity;
+    public float JumpReleaseGravity;
 
     bool IsJumping => VerticalVelocity > 0.0f;
     bool IsFalling => VerticalVelocity < 0.0f;
@@ -197,10 +196,12 @@ public class PlayerMovement : MonoBehaviour
         if (JumpsLeft <= 0)
             return;
 
-        JumpsLeft--;
+        if (JumpsLeft == Jumps)
+            VerticalVelocity = JumpVelocity;
+        else
+            VerticalVelocity = DoubleJumpVelocity;
 
-        VerticalVelocity = JumpStrength;
-        JumpBoostTimeLeft = JumpBoostTime;
+        JumpsLeft--;
     }
 
     void UpdateJump()
@@ -215,24 +216,16 @@ public class PlayerMovement : MonoBehaviour
         if (IsGrounded)
             JumpsLeft = Jumps;
 
-        // update jump boost time
-        if (IsGrounded)
-            JumpBoostTimeLeft = JumpBoostTime;
-        else if (!JumpInput)
-            JumpBoostTimeLeft = 0.0f;
-        else
-            JumpBoostTimeLeft -= Time.fixedDeltaTime;
-
         // We loose one jump when falling (and coyote-time has passed).
         if (IsFalling && CoyoteTimeLeft <= 0.0f && JumpsLeft == Jumps)
             JumpsLeft--;
 
         if (IsJumping)
         {
-            if (JumpBoostTimeLeft > 0.0f)
-                VerticalVelocity += JumpBoostStrength * Time.fixedDeltaTime;
-            else
+            if (JumpInput)
                 VerticalVelocity -= Gravity * Time.fixedDeltaTime;
+            else
+                VerticalVelocity -= JumpReleaseGravity * Time.fixedDeltaTime;
 
             // Prevent sticking to ceiling.
             {

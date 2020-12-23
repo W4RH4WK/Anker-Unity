@@ -511,12 +511,12 @@ MonoBehaviour:
   CrouchSlideSpeed: 20
   CrouchSlideTime: 0.22
   CrouchSlideCooldown: 0.5
-  Gravity: 80
-  MaxFallSpeed: 40
+  Gravity: 56.25
+  MaxFallSpeed: 30
   Jumps: 2
-  JumpStrength: 10
-  JumpBoostStrength: 50
-  JumpBoostTime: 0.12
+  JumpVelocity: 23.5
+  DoubleJumpVelocity: 18.8
+  JumpReleaseGravity: 225
   CoyoteTime: 0.15
   Dashes: 1
   DashSpeed: 50
