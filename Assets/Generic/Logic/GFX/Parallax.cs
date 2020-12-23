@@ -6,7 +6,7 @@ public class Parallax : MonoBehaviour
 
     void Update()
     {
-        var pos = Factor * Camera.main.transform.localPosition;
+        var pos = (Vector2.one - Factor) * Camera.main.transform.localPosition;
         transform.localPosition = new Vector3(pos.x, pos.y, transform.localPosition.z);
     }
 }
