@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Parallax : MonoBehaviour
 {
-    public Vector2 Factor;
+    public Vector2 Factor = Vector2.one;
 
     void Update()
     {
