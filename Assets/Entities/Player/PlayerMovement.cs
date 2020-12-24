@@ -289,6 +289,8 @@ public class PlayerMovement : MonoBehaviour
         if (IsGrounded && Mathf.Abs(MoveInput.x) <= 0.1f)
             DashDirection = LookDirection.Inverse();
 
+        VerticalVelocity = 0.0f;
+
         DashesLeft--;
         DashTimeLeft = DashTime;
         DashCooldownLeft = DashCooldown;
