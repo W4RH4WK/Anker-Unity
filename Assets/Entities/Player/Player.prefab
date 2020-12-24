@@ -516,7 +516,7 @@ MonoBehaviour:
   Jumps: 2
   JumpVelocity: 23.5
   DoubleJumpVelocity: 18.8
-  JumpReleaseGravity: 225
+  JumpReleaseVerticalDeceleration: 225
   CoyoteTime: 0.15
   Dashes: 1
   DashSpeed: 50
@@ -525,3 +525,4 @@ MonoBehaviour:
   GroundSlamSpeed: 80
   AnchorReelSpeed: 30
   AnchorReelBreakoffDistance: 0.2
+  AnchorReelOvershootVerticalDeceleration: 120

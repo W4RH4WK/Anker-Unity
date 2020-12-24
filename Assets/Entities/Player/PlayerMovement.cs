@@ -144,13 +144,30 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateFalling()
     {
-        if (IsJumping || IsDashing || IsGroundSlamming)
+        if (IsDashing || IsGroundSlamming)
             return;
 
         if (IsGrounded)
+        {
             VerticalVelocity = 0.0f;
+        }
+        else if (VerticalVelocity > 0.0f)
+        {
+            // Upward velocity is reduced with different rates, depending on the
+            // type of movement.
+
+            var deceleration = Gravity;
+            if (UseAnchorReelOvershootGravity)
+                deceleration = AnchorReelOvershootVerticalDeceleration;
+            else if (UseJumpReleaseVerticalDeceleration)
+                deceleration = JumpReleaseVerticalDeceleration;
+
+            VerticalVelocity -= deceleration * Time.fixedDeltaTime;
+        }
         else
+        {
             VerticalVelocity -= Gravity * Time.fixedDeltaTime;
+        }
 
         VerticalVelocity = Mathf.Max(VerticalVelocity, -MaxFallSpeed);
     }
@@ -163,18 +180,16 @@ public class PlayerMovement : MonoBehaviour
     int JumpsLeft;
     public float JumpVelocity;
     public float DoubleJumpVelocity;
-    public float JumpReleaseGravity;
+    public float JumpReleaseVerticalDeceleration;
+    bool UseJumpReleaseVerticalDeceleration;
 
-    bool IsJumping => VerticalVelocity > 0.0f;
     bool IsFalling => VerticalVelocity < 0.0f;
 
     public float CoyoteTime;
     float CoyoteTimeLeft;
 
-    bool JumpInput;
     void OnJump(InputValue value)
     {
-        JumpInput = value.isPressed;
         if (value.isPressed)
         {
             if (IsCrouching)
@@ -188,6 +203,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 Jump();
             }
+        }
+        else
+        {
+            UseJumpReleaseVerticalDeceleration = true;
         }
     }
 
@@ -206,6 +225,9 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateJump()
     {
+        if (VerticalVelocity <= 0.0f)
+            UseJumpReleaseVerticalDeceleration = false;
+
         // update coyote time
         if (IsGrounded)
             CoyoteTimeLeft = CoyoteTime;
@@ -220,19 +242,12 @@ public class PlayerMovement : MonoBehaviour
         if (IsFalling && CoyoteTimeLeft <= 0.0f && JumpsLeft == Jumps)
             JumpsLeft--;
 
-        if (IsJumping)
+        if (VerticalVelocity > 0.0f)
         {
-            if (JumpInput)
-                VerticalVelocity -= Gravity * Time.fixedDeltaTime;
-            else
-                VerticalVelocity -= JumpReleaseGravity * Time.fixedDeltaTime;
-
             // Prevent sticking to ceiling.
-            {
-                var head = GetHead();
-                if (Physics2DUtils.BoxCast(head, Vector2.up, head.size.y, TerrainContactFilter))
-                    VerticalVelocity = 0;
-            }
+            var head = GetHead();
+            if (Physics2DUtils.BoxCast(head, Vector2.up, head.size.y, TerrainContactFilter))
+                VerticalVelocity = 0;
         }
     }
 
@@ -320,6 +335,8 @@ public class PlayerMovement : MonoBehaviour
 
     public float AnchorReelSpeed;
     public float AnchorReelBreakoffDistance;
+    public float AnchorReelOvershootVerticalDeceleration;
+    bool UseAnchorReelOvershootGravity;
     AnchorPoint ActiveAnchorPoint;
 
     AnchorPointSelector AnchorPointSelector;
@@ -328,6 +345,9 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateAnchor()
     {
+        if (VerticalVelocity <= 0.0f)
+            UseAnchorReelOvershootGravity = false;
+
         if (!ActiveAnchorPoint)
             return;
 
@@ -335,6 +355,7 @@ public class PlayerMovement : MonoBehaviour
         if (toPoint.magnitude < AnchorReelBreakoffDistance)
         {
             ActiveAnchorPoint = null;
+            UseAnchorReelOvershootGravity = true;
         }
         else
         {
@@ -377,10 +398,10 @@ public class PlayerMovement : MonoBehaviour
         UpdateMove();
         UpdateCrouch();
         UpdateGroundSlam();
-        UpdateFalling();
         UpdateJump();
         UpdateDash();
         UpdateAnchor();
+        UpdateFalling();
 
         RigidBody.velocity = new Vector2(MoveVelocity, VerticalVelocity);
     }
