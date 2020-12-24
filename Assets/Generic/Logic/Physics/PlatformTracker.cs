@@ -14,7 +14,7 @@ public class PlatformTracker : MonoBehaviour
 
     Collider2D Collider;
 
-    float ColliderDisableTime = 0.1f;
+    float ColliderDisableTime = 0.2f;
     float ColliderDisableTimeLeft;
 
     void Awake()
