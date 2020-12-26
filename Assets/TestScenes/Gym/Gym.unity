@@ -239,10 +239,6 @@ PrefabInstance:
       propertyPath: Target
       value: 
       objectReference: {fileID: 1504649281}
-    - target: {fileID: 8073213442228675214, guid: edda67f4db2897e4e8df515829bc6af4, type: 3}
-      propertyPath: Breathing
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: edda67f4db2897e4e8df515829bc6af4, type: 3}
 --- !u!1001 &364828373
@@ -9184,11 +9180,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 9122901689469017954, guid: f36d199aa940c74489985a8728308dce, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.75
+      value: -3.46
       objectReference: {fileID: 0}
     - target: {fileID: 9122901689469017954, guid: f36d199aa940c74489985a8728308dce, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.5
+      value: -9.55
       objectReference: {fileID: 0}
     - target: {fileID: 9122901689469017954, guid: f36d199aa940c74489985a8728308dce, type: 3}
       propertyPath: m_LocalPosition.z

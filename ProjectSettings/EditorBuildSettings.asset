@@ -8,8 +8,11 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/TestScenes/InputTest.unity
     guid: 3ea6b19115308a24a8efdc17ddc1ca08
-  - enabled: 1
+  - enabled: 0
     path: Assets/TestScenes/Dialogue/Dialogue.unity
     guid: b7d588760afac214c9d61222014676ae
+  - enabled: 1
+    path: Assets/TestScenes/Gym/Gym.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 4a7528d4226804a4aacaf41e3c27d57b, type: 2}
