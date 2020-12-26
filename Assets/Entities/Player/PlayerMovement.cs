@@ -70,6 +70,7 @@ public class PlayerMovement : MonoBehaviour
     float CrouchSlideTimeLeft;
     public float CrouchSlideCooldown;
     float CrouchSlideCooldownLeft;
+    public float CrouchSlideOverEdgeMoveVelocityDivider;
 
     public bool IsCrouching => IsGrounded && CrouchInput;
     bool IsCrouchSliding => CrouchSlideTimeLeft > 0.0f;
@@ -107,8 +108,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Stop crouch slide when sliding over edge.
-        if (IsFalling)
+        if (IsFalling && CrouchSlideCooldownLeft > 0.0f)
+        {
             CrouchSlideTimeLeft = 0.0f;
+            MoveVelocity /= CrouchSlideOverEdgeMoveVelocityDivider;
+        }
 
         if (CrouchSlideTimeLeft > 0.0f)
             MoveVelocity = LookDirection.ToFactor() * CrouchSlideSpeed;
