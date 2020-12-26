@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 8026958592563404538}
   - component: {fileID: 8026958592563404537}
   - component: {fileID: 8026958592563404536}
-  - component: {fileID: 8073213442228675214}
   - component: {fileID: 3659674828860185544}
   - component: {fileID: 8285854278259812715}
+  - component: {fileID: 8073213442228675214}
   m_Layer: 31
   m_Name: Camera
   m_TagString: MainCamera
@@ -86,24 +86,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8026958592563404543}
   m_Enabled: 1
---- !u!114 &8073213442228675214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8026958592563404543}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05144a47d2070064585c43c39ad47a24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Target: {fileID: 0}
-  Offset: {x: 0, y: 1.5}
-  SmoothTime: 0.18
-  Breathing: 0
-  BreathingAmplitude: 0.01
-  BreathingFrequency: 0.2
 --- !u!50 &3659674828860185544
 Rigidbody2D:
   serializedVersion: 4
@@ -141,3 +123,21 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 12
+--- !u!114 &8073213442228675214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8026958592563404543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05144a47d2070064585c43c39ad47a24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: {fileID: 0}
+  Offset: {x: 0, y: 1.5}
+  Smoothing: 0.14
+  Breathing: 0
+  BreathingAmplitude: 0.01
+  BreathingFrequency: 0.2

@@ -6,13 +6,11 @@ public class CameraFollower : MonoBehaviour
     public GameObject Target;
     public Vector2 Offset;
 
-    public float SmoothTime;
+    public float Smoothing;
 
     public bool Breathing;
     public float BreathingAmplitude;
     public float BreathingFrequency;
-
-    Vector3 Velocity;
 
     Rigidbody2D Body;
 
@@ -47,7 +45,7 @@ public class CameraFollower : MonoBehaviour
         }
 
         Body.position =
-            Vector3.SmoothDamp(Body.position, TargetPosition() + breathingOffset, ref Velocity, SmoothTime);
+            Vector3.Lerp(Body.position, TargetPosition() + breathingOffset, Time.fixedDeltaTime / Smoothing);
     }
 
 #if !UNITY_EDITOR
@@ -56,8 +54,8 @@ public class CameraFollower : MonoBehaviour
         GUI.WindowFunction windowFunc = (int windowId) =>
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label("SmoothTime");
-            SmoothTime = float.Parse(GUILayout.TextField($"{SmoothTime}"));
+            GUILayout.Label("Smoothing");
+            Smoothing = float.Parse(GUILayout.TextField($"{Smoothing}"));
             GUILayout.EndHorizontal();
         };
 
