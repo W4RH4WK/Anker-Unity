@@ -511,6 +511,7 @@ MonoBehaviour:
   CrouchSlideSpeed: 20
   CrouchSlideTime: 0.22
   CrouchSlideCooldown: 0.5
+  CrouchSlideOverEdgeMoveVelocityDivider: 2
   Gravity: 56.25
   MaxFallSpeed: 30
   Jumps: 2
