@@ -148,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateFalling()
     {
-        if (IsDashing || IsGroundSlamming)
+        if (IsDashing || IsGroundSlamming || ActiveAnchorPoint)
             return;
 
         if (IsGrounded)
