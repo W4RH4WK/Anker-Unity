@@ -187,7 +187,7 @@ public class PlayerMovement : MonoBehaviour
     public float JumpReleaseVerticalDeceleration;
     bool UseJumpReleaseVerticalDeceleration;
 
-    bool IsFalling => VerticalVelocity < 0.0f;
+    public bool IsFalling => VerticalVelocity < 0.0f;
 
     public float CoyoteTime;
     float CoyoteTimeLeft;
