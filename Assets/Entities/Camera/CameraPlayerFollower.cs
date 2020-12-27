@@ -33,17 +33,15 @@ public class CameraPlayerFollower : MonoBehaviour
     void OnEnable()
     {
         Player = FindObjectOfType<PlayerMovement>();
+
+        if (Player)
+            Body.position = TargetPosition();
     }
 
     void Awake()
     {
         Body = GetComponent<Rigidbody2D>();
         Assert.IsNotNull(Body);
-    }
-
-    void Start()
-    {
-        Body.position = TargetPosition();
     }
 
     void FixedUpdate()
