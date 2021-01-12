@@ -23,7 +23,7 @@ public class DialgoueTestScene : MonoBehaviour
         Assert.IsNotNull(Steve);
         Assert.IsNotNull(Tim);
 
-        Tim.SetAlias("Tom");
+        // Tim.SetAlias("Tom");
 
         yield return new WaitForSeconds(1.0f);
 
@@ -44,7 +44,7 @@ public class DialgoueTestScene : MonoBehaviour
         yield return Dialogue.Tell($"{Steve} carries on along without {Tim}.");
         yield return Dialogue.HidePortraitLeft();
 
-        yield return Dialogue.Tell("Fin.");
+        yield return Dialogue.Tell("— Fin.");
         yield return Dialogue.Hide();
 
         yield return new WaitForSeconds(1.0f);

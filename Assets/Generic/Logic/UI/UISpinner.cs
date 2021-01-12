@@ -15,6 +15,6 @@ public class UISpinner : MonoBehaviour
 
     void Update()
     {
-        Transform.Rotate(Vector3.forward, Speed * Time.deltaTime);
+        Transform.Rotate(Vector3.forward, -Speed * Time.deltaTime);
     }
 }

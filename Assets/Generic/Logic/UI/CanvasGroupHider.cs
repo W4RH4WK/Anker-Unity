@@ -4,6 +4,9 @@ using UnityEngine.Assertions;
 
 public class CanvasGroupHider : MonoBehaviour
 {
+    public void Show() => ShowAsync(0.0f);
+    public void Hide() => HideAsync(0.0f);
+
     public IEnumerator ShowAsync(float duration) => Animator.On(duration);
     public IEnumerator HideAsync(float duration) => Animator.Off(duration);
 
@@ -41,6 +44,6 @@ public class CanvasGroupHider : MonoBehaviour
             RectTransform.anchoredPosition = Vector2.Lerp(HidePosition, ShowPosition, Animator.Percent);
 
         if (Transparency)
-            CanvasGroup.alpha = Mathf.Lerp(0.0f, 1.0f, Animator.Percent);
+            CanvasGroup.alpha = Animator.Percent;
     }
 }

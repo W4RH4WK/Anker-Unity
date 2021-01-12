@@ -16,7 +16,7 @@ class Timer
     public float Percent => Mathf.InverseLerp(StartTime, EndTime, Time.time);
 
     public float StartTime { get; private set; }
-    public float EndTime { get; private set; } = 0.001f;
+    public float EndTime { get; private set; } = Mathf.Epsilon;
 }
 
 class OnOffAnimator

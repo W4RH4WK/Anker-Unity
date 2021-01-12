@@ -58,7 +58,7 @@ public class DialogueBox : MonoBehaviour
     void Update()
     {
         var color = Message.color;
-        color.a = Mathf.Lerp(0.0f, 1.0f, TextRevealer.Percent);
+        color.a = TextRevealer.Percent;
         Message.color = color;
     }
 }

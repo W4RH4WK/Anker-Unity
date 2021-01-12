@@ -23,15 +23,18 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
                                 string text) => this.Par(PortraitLeft.LowerAsync(), PortraitRight.RaiseAsync(),
                                                          SetPortraitRight(character.Image), Say(character.Name, text));
 
-    public IEnumerator Tell(string text) => this.Par(Box.HideName(), Say($"— {text}"), PortraitLeft.LowerAsync(),
+    public IEnumerator Tell(string text) => this.Par(Box.HideName(), Say(text), PortraitLeft.LowerAsync(),
                                                      PortraitRight.LowerAsync());
 
     public IEnumerator ShowDocument(Document document)
     {
         EventSystem.current.SetSelectedGameObject(gameObject);
 
-        yield return this.Par(Doc.ShowAsync(), Doc.SetText(document.Text));
-        yield return Doc.HideAsync();
+        yield return DocumentBackground.ShowAsync(DocumentTextRevealDuration);
+        yield return Document.ShowAsync();
+        yield return Document.SetText(document.Title, document.Text);
+        yield return Document.HideAsync();
+        yield return DocumentBackground.HideAsync(DocumentTextRevealDuration);
     }
 
     public IEnumerator HidePortraitLeft() => PortraitLeft.HideAsync();
@@ -66,6 +69,7 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
 
     public float AnimationDuration;
     public float DocumentTextRevealDuration;
+    public float DocumentTextFadedOutAlpha;
 
     public AudioClip ClickSound;
 
@@ -84,18 +88,23 @@ public class DialogueSystem : MonoBehaviour, ISubmitHandler
     DialogueBackground Background;
 
     [SerializeField]
-    DocumentBox Doc;
+    DocumentBox Document;
+
+    [SerializeField]
+    CanvasGroupHider DocumentBackground;
 
     AudioSource AudioSource;
 
     void Awake()
     {
+        Assert.IsNotNull(ClickSound);
+
         Assert.IsNotNull(Box);
         Assert.IsNotNull(PortraitLeft);
         Assert.IsNotNull(PortraitRight);
         Assert.IsNotNull(Background);
-        Assert.IsNotNull(Doc);
-        Assert.IsNotNull(ClickSound);
+        Assert.IsNotNull(Document);
+        Assert.IsNotNull(DocumentBackground);
 
         AudioSource = GetComponent<AudioSource>();
         Assert.IsNotNull(AudioSource);
