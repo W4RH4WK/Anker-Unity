@@ -7,45 +7,46 @@ using UnityEngine.UI;
 
 public class DocumentBox : MonoBehaviour
 {
-    public IEnumerator SetText(string title, string text, char separator = '|')
+    public IEnumerator Set(string title, string body, char separator = '|')
     {
-        DocumentTextParts.Clear();
+        BodyParts.Clear();
         Spinner.Hide();
 
-        DocumentTitle.text = title;
-        yield return this.Par(DocumentTitleAnimator.On(System.DocumentTextRevealDuration), System.WaitForContinue());
+        Title.text = title;
+        yield return this.Par(TitleAnimator.On(System.TextRevealDuration),
+                              FindObjectOfType<Filament>().WaitForContinue()); // FIXME
 
-        var parts = text.Split(separator);
+        var parts = body.Split(separator);
 
         for (var i = 0; i < parts.Count(); i++)
         {
-            DocumentTextParts.Add(parts[i]);
-            DocumentTextPartTimer.Start(System.DocumentTextRevealDuration);
+            BodyParts.Add(parts[i]);
+            BodyPartTimer.Start(System.TextRevealDuration);
 
             if (i == parts.Count() - 1)
-                yield return this.Par(DocumentTextPartTimer.Wait(), Spinner.ShowAsync(System.AnimationDuration));
+                yield return this.Par(BodyPartTimer.Wait(), Spinner.ShowAsync(System.AnimationDuration));
 
-            yield return System.WaitForContinue();
+            yield return FindObjectOfType<Filament>().WaitForContinue(); // FIXME
         }
 
-        DocumentTitleAnimator.Off();
-        DocumentTitle.text = "";
-        DocumentTextParts.Clear();
+        TitleAnimator.Off();
+        Title.text = "";
+        BodyParts.Clear();
     }
 
     [SerializeField]
-    Text DocumentTitle;
-    OnOffAnimator DocumentTitleAnimator = new OnOffAnimator();
+    Text Title;
+    OnOffAnimator TitleAnimator = new OnOffAnimator();
 
     [SerializeField]
-    Text DocumentText;
-    IList<string> DocumentTextParts = new List<string>();
-    Timer DocumentTextPartTimer = new Timer();
+    Text Body;
+    IList<string> BodyParts = new List<string>();
+    Timer BodyPartTimer = new Timer();
 
     [SerializeField]
     CanvasGroupHider Spinner;
 
-    DialogueSystem System;
+    DocumentSystem System;
 
     public IEnumerator ShowAsync() => Hider.ShowAsync(System.AnimationDuration);
     public IEnumerator HideAsync() => Hider.HideAsync(System.AnimationDuration);
@@ -53,11 +54,11 @@ public class DocumentBox : MonoBehaviour
 
     void Awake()
     {
-        Assert.IsNotNull(DocumentTitle);
-        Assert.IsNotNull(DocumentText);
+        Assert.IsNotNull(Title);
+        Assert.IsNotNull(Body);
         Assert.IsNotNull(Spinner);
 
-        System = GetComponentInParent<DialogueSystem>();
+        System = GetComponentInParent<DocumentSystem>();
         Assert.IsNotNull(System);
 
         Hider = GetComponent<CanvasGroupHider>();
@@ -67,25 +68,24 @@ public class DocumentBox : MonoBehaviour
     void Update()
     {
         {
-            var titleColor = DocumentTitle.color;
-            titleColor.a = DocumentTitleAnimator.Percent;
-            DocumentTitle.color = titleColor;
+            var titleColor = Title.color;
+            titleColor.a = TitleAnimator.Percent;
+            Title.color = titleColor;
         }
 
-        var color = DocumentText.color;
+        var color = Body.color;
 
-        color.a = System.DocumentTextFadedOutAlpha;
-        DocumentText.text = $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>";
-        for (var i = 0; i < DocumentTextParts.Count - 2; i++)
-            DocumentText.text += DocumentTextParts[i];
-        DocumentText.text += "</color>";
+        color.a = System.TextFadedOutAlpha;
+        Body.text = $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>";
+        for (var i = 0; i < BodyParts.Count - 2; i++)
+            Body.text += BodyParts[i];
+        Body.text += "</color>";
 
-        color.a = Mathf.SmoothStep(1.0f, System.DocumentTextFadedOutAlpha, DocumentTextPartTimer.Percent);
-        DocumentText.text +=
-            $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{DocumentTextParts.ElementAtOrDefault(DocumentTextParts.Count - 2)}</color>";
+        color.a = Mathf.SmoothStep(1.0f, System.TextFadedOutAlpha, BodyPartTimer.Percent);
+        Body.text +=
+            $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{BodyParts.ElementAtOrDefault(BodyParts.Count - 2)}</color>";
 
-        color.a = Mathf.SmoothStep(0.0f, 1.0f, DocumentTextPartTimer.Percent);
-        DocumentText.text +=
-            $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{DocumentTextParts.LastOrDefault()}</color>";
+        color.a = Mathf.SmoothStep(0.0f, 1.0f, BodyPartTimer.Percent);
+        Body.text += $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{BodyParts.LastOrDefault()}</color>";
     }
 }

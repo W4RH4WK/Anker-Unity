@@ -4,8 +4,6 @@ using UnityEngine.Assertions;
 
 public class DialgoueTestScene : MonoBehaviour
 {
-    DialogueSystem Dialogue;
-
     [SerializeField]
     DialogueCharacter Steve;
 
@@ -17,35 +15,37 @@ public class DialgoueTestScene : MonoBehaviour
 
     IEnumerator Start()
     {
-        Dialogue = FindObjectOfType<DialogueSystem>();
-        Assert.IsNotNull(Dialogue);
+        var filament = FindObjectOfType<Filament>();
+        var dialogue = filament.DialogueSystem;
+        var document = filament.DocumentSystem;
 
         Assert.IsNotNull(Steve);
         Assert.IsNotNull(Tim);
-
         // Tim.SetAlias("Tom");
+
+        Assert.IsNotNull(TestDoc);
 
         yield return new WaitForSeconds(1.0f);
 
-        yield return Dialogue.Tell("Our fearless protagonist approaches his fellow mate.");
+        yield return dialogue.Tell("Our fearless protagonist approaches his fellow mate.");
 
-        yield return Dialogue.Say(Tim, $"Ahoi {Steve}!");
-        yield return Dialogue.Say("'ow you doin', chum?");
+        yield return dialogue.Say(Tim, $"Ahoi {Steve}!");
+        yield return dialogue.Say("'ow you doin', chum?");
 
-        yield return Dialogue.SayRight(Steve, $"Oi {Tim}! Me is fine. How 'bout you?");
+        yield return dialogue.SayRight(Steve, $"Oi {Tim}! Me is fine. How 'bout you?");
 
-        yield return Dialogue.Say(Tim, "O' good, o' good.");
-        yield return Dialogue.Say("Take a look at this!");
+        yield return dialogue.Say(Tim, "O' good, o' good.");
+        yield return dialogue.Say("Take a look at this!");
 
-        yield return Dialogue.ShowDocument(TestDoc);
+        yield return document.Show(TestDoc);
 
-        yield return Dialogue.SayRight(Steve, "Oright, see ya.");
+        yield return dialogue.SayRight(Steve, "Oright, see ya.");
 
-        yield return Dialogue.Tell($"{Steve} carries on along without {Tim}.");
-        yield return Dialogue.HidePortraitLeft();
+        yield return dialogue.Tell($"{Steve} carries on along without {Tim}.");
+        yield return dialogue.HidePortraitLeft();
 
-        yield return Dialogue.Tell("— Fin.");
-        yield return Dialogue.Hide();
+        yield return dialogue.Tell("— Fin.");
+        yield return dialogue.Hide();
 
         yield return new WaitForSeconds(1.0f);
         Application.Quit();
